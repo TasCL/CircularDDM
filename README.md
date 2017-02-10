@@ -42,7 +42,7 @@ install.packages("CircularDDM_0.0.1.tar.gz", repos = NULL, type="source")
  - R (>= 3.0.2)
  - Rtools
  - Rcpp package (>= 0.12.3)
- - RcppArmadillo (>= 0.7.500.0.0)
+ - RcppArmadillo (>= 0.6.700.6.0)
  
 ## References
 * Smith, P. L. (2016). Diffusion Theory of Decision Making in Continuous Report.
