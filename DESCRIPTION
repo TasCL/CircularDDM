@@ -16,6 +16,6 @@ Maintainer: Yi-Shin Lin <yishin.lin@utas.edu.au>
 Date/Publication: 2017-01-20 15:45:30
 LazeData: TRUE
 Imports: Rcpp (>= 0.12.3)
-LinkingTo: Rcpp (>= 0.12.3), RcppArmadillo (>= 0.7.500.0.0)
+LinkingTo: Rcpp (>= 0.12.3), RcppArmadillo (>= 0.6.700.6.0)
 RoxygenNote: 5.0.1
 NeedsCompilation: yes

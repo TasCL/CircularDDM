@@ -6,19 +6,6 @@
 
 using namespace Rcpp;
 
-// dinvGauss
-arma::vec dinvGauss(arma::vec x, double mu, double lambda);
-RcppExport SEXP CircularDDM_dinvGauss(SEXP xSEXP, SEXP muSEXP, SEXP lambdaSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    rcpp_result_gen = Rcpp::wrap(dinvGauss(x, mu, lambda));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rvm
 arma::vec rvm(int n, double mu, double k);
 RcppExport SEXP CircularDDM_rvm(SEXP nSEXP, SEXP muSEXP, SEXP kSEXP) {

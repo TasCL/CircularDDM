@@ -13,18 +13,11 @@
 //   with this program; if not, write to the Free Software Foundation, Inc.,
 //   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #include <CircularDDM.hpp>
-#include <boost/math/distributions/inverse_gaussian.hpp>
 
 void set_seed(unsigned int seed) {
   Rcpp::Environment base_env("package:base");
   Rcpp::Function set_seed_r = base_env["set.seed"];
   set_seed_r(seed);
-}
-
-double dig(double x, double mu, double lambda) {
-  // dig stands for density of inverse gaussian distribution
-  auto d = boost::math::inverse_gaussian_distribution<>{mu, lambda};
-  return boost::math::pdf(d, x);
 }
 
 arma::vec besselJ(arma::vec x, double nu=1) {
@@ -33,18 +26,6 @@ arma::vec besselJ(arma::vec x, double nu=1) {
   {
     int idx  = std::distance(x.begin(), i);
     out[idx] = R::bessel_j(*i, nu);
-  }
-  return out;
-}
-
-//' @export
-// [[Rcpp::export]]
-arma::vec dinvGauss(arma::vec x, double mu, double lambda) {
-  arma::vec out(x.n_elem);
-  for(arma::vec::iterator i=x.begin(); i!=x.end(); ++i)
-  {
-    int idx  = std::distance(x.begin(), i);
-    out[idx] = dig(*i, mu, lambda);
   }
   return out;
 }
@@ -102,7 +83,7 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
   int MAXIT=100, double err=1) {
   // Tolerance; Maximum number of times to iterate; Initial error
 
-  double a, b, x, x02, term1, term2, n1=n+1, n2=std::pow(n,2);
+  double a, b, x, n1=n+1;
   int iter=0;
 
   do {
@@ -119,13 +100,16 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
       a = R::bessel_y(x0, n);
       b = R::bessel_y(x0, n1);
       break;
+    default:
+      a = 0;
+      b = 0;
     }
     err  = (2*a*x0*(n*a - b*x0) ) /
       ( 2*b*b*x0*x0 - a*b*x0*(4*n1) + (n*n1+x0*x0)*a*a );
     x    = x0 - err;
     x0   = x;
     iter = iter + 1;
-  } while (std::abs(err)>tol & iter<MAXIT);
+  } while ( (std::abs(err) > tol) & (iter < MAXIT) );
 
   if (iter > (MAXIT - 1)) {
     std::cout << "Failed to converge to within tolerance.\n" <<
@@ -167,7 +151,6 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
 // [[Rcpp::export]]
 arma::vec besselzero(double nu, int k, int kind) {
   double x0;
-  int k3 = 3*k;
 
   arma::vec x = arma::zeros<arma::vec>(3*k);
   for (int j=1; j<=3*k; j++) {
@@ -319,8 +302,8 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 //' ## rddm example
 //' pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
 //' den  <- rddm(1e3, pVec);
-//' hist(den[,1], breaks = "fd", xlab="Response Time")
-//' hist(den[,3], breaks = "fd", xlab="Response Angle")
+//' hist(den[,1], breaks = "fd", xlab="Response Time", main="Density")
+//' hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 //' @export
 // [[Rcpp::export]]
 arma::vec dddm(arma::mat x, arma::vec pVec, int k=141) {

@@ -2,7 +2,6 @@
 
 export(besselzero)
 export(dddm)
-export(dinvGauss)
 export(logLik_dt)
 export(logLik_resp)
 export(rddm)
