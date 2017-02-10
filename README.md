@@ -24,8 +24,8 @@ dddm(x, pVec)
 ###################
 pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
 den  <- rddm(1e3, pVec);
-hist(den[,1], breaks = "fd", xlab="Response Time")
-hist(den[,3], breaks = "fd", xlab="Response Angle")
+hist(den[,1], breaks = "fd", xlab="Response Time", main="Density")
+hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 
 ```
 
@@ -41,7 +41,7 @@ install.packages("CircularDDM_0.0.1.tar.gz", repos = NULL, type="source")
 ## Prerequisites
  - R (>= 3.0.2)
  - Rtools
- - Rcpp package (>= 0.12.3)
+ - Rcpp (>= 0.12.3)
  - RcppArmadillo (>= 0.6.700.6.0)
  
 ## References
