@@ -141,7 +141,7 @@ logLik_dt <- function(x, pVec, k = 141L) {
 #' ## rddm example
 #' pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
 #' den  <- rddm(1e3, pVec);
-#' hist(den[,1], breaks = "fd", xlab="Response Time", main="Density")
+#' hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
 #' hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 #' @export
 dddm <- function(x, pVec, k = 141L) {

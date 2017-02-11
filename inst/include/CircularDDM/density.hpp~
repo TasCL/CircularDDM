@@ -1,3 +1,0 @@
-#include <RcppArmadillo.h>
-double dexp_c(int x, double lambda);
-double dig(double x, double mu, double lambda);

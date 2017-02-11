@@ -58,19 +58,19 @@ arma::vec rvm(int n, double mu, double k) {
   arma::vec out(n);
   arma::vec::iterator i = out.begin() ;
   do {
-    z  = std::cos(arma::datum::pi * R::runif(0,1));
+    z  = std::cos(M_PI * R::runif(0,1));
     f  = (1. + r * z)/(r + z);
     c  = k * (r - f);
 
     U = R::runif(0, 1);
     if(c * (2 - c) > U) {
       *i = (R::runif(0,1) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-      if(k == 0) { *i = R::runif(0, 2*arma::datum::pi); }
+      if(k == 0) { *i = R::runif(0, 2*M_PI); }
       i++;
     } else {
       if(std::log(c/U) + 1 >= c) {
         *i = (R::runif(0,1) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-        if(k == 0) { *i = R::runif(0, 2*arma::datum::pi); }
+        if(k == 0) { *i = R::runif(0, 2*M_PI); }
         i++;
       }
     }
@@ -155,7 +155,7 @@ arma::vec besselzero(double nu, int k, int kind) {
   arma::vec x = arma::zeros<arma::vec>(3*k);
   for (int j=1; j<=3*k; j++) {
     // Initial guess of zeros
-    x0     = 1 + std::sqrt(2) + (j-1) * arma::datum::pi + nu + std::pow(nu, 0.4);
+    x0     = 1 + std::sqrt(2) + (j-1) * M_PI + nu + std::pow(nu, 0.4);
     x(j-1) = findzero(nu, x0, kind);     // Halley's method
     if (x(j-1) == INFINITY) {Rcpp::stop("Bad guess.");}
   }
@@ -302,7 +302,7 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 //' ## rddm example
 //' pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
 //' den  <- rddm(1e3, pVec);
-//' hist(den[,1], breaks = "fd", xlab="Response Time", main="Density")
+//' hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
 //' hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 //' @export
 // [[Rcpp::export]]
@@ -318,7 +318,6 @@ arma::vec dddm(arma::mat x, arma::vec pVec, int k=141) {
 arma::mat rddm(int n, arma::vec pVec, double p=.15) {
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
-  double pi = arma::datum::pi;
   arma::vec RT(n), R(n), A(n); // R for responses, A for angle
   for (int i = 0; i < n; i++) {
     step = 0; rPos = 0; xPos = 0; yPos = 0;
@@ -336,7 +335,7 @@ arma::mat rddm(int n, arma::vec pVec, double p=.15) {
     // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
     RT[i] = pVec[3] + R::rgamma(step, p); // gamma a=shape b=scale=1/rate
     R[i]  = thPos/2;
-    A[i]  = ((0.5 - R[i]) > 0.5*pi) ? pi - (0.5 - R[i]) : 0.5 - R[i];
+    A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
   }
 
   arma::mat tmp = arma::join_horiz(RT, R);
