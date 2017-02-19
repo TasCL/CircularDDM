@@ -13,9 +13,7 @@ void rvm(int n, double mu, double k, double y[]) {
   arma::vec::iterator i = out.begin() ;
   do {
     int idx = std::distance(out.begin(), i);
-
     z = std::cos(M_PI * arma::as_scalar(arma::randu<arma::vec>(1)));
-    // z  = std::cos(M_PI * R::runif(0,1));
     f  = (1. + r * z)/(r + z);
     c  = k * (r - f);
 
