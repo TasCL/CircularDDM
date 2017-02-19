@@ -1,7 +1,7 @@
 # Circular Drift-diffusion Model 
 
-This package implements circular drift-diffusion model, using Armadillo C++. A
-parallle MATLAB toolbox is tentatively stored in inst/matlab.
+This package implements circular drift-diffusion model, using Armadillo C++. 
+MATLAB callable functions are saved in inst/matlab.
 
 ## Getting Started
 
