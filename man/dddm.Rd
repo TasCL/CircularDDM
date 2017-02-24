@@ -16,7 +16,7 @@ continuous responses/reports/outcomes. Each row is a trial.}
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
 or [thresh, mu1, mu2, ndt, sigmasq]. The order matters.}
 
-\item{k}{a precision for calculate the infinite series in \code{dddm}. The
+\item{k}{a precision for calculating the infinite series in \code{dddm}. The
 larger the k is, the larger the memory space is required. Default is 141.}
 
 \item{n}{number of observations.}

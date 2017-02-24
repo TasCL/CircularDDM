@@ -30,9 +30,17 @@ arma::vec besselJ(arma::vec x, double nu=1) {
   return out;
 }
 
-//' Von Mises Distribution: Random Number Generator
+//' Generate random deviates for the von Mises distribution
 //'
-//' Generate random numbers for von Mises circular distribution.
+//' Generate random deviates fro the von Mises distribution.
+//'
+//' A random variable for circular normal distribution has the form:\cr
+//' \deqn{f(theta; mu, kappa) = 1 / (2*pi*I_0(kappa)) * exp(kappa * cos(theta-mu))}
+//' 0 <= theta <= 2*pi
+//'
+//' I_0(kappa) in the normalizing constant is the modified Bessel function of
+//' the first kind and order zero. It is given by:\cr
+//' \deqn{I_0(kappa) = 1/2*pi $$\int_{0}^{2*pi} exp(k*cos(theta)) dtheta$$}
 //'
 //' @param n number of observations.
 //' @param mu mean direction of the distribution.
@@ -281,7 +289,7 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 //' @param n number of observations.
 //' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
 //' or [thresh, mu1, mu2, ndt, sigmasq]. The order matters.
-//' @param k a precision for calculate the infinite series in \code{dddm}. The
+//' @param k a precision for calculating the infinite series in \code{dddm}. The
 //' larger the k is, the larger the memory space is required. Default is 141.
 //' @param p a precision for random walk step in \code{rddm}. Default is 0.15
 //' second

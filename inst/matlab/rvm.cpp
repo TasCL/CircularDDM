@@ -1,55 +1,43 @@
-#include "mex.h"
 #include <iostream>
-#include <armadillo>
+#include <random>
+#include "mex.h"
 
 void rvm(int n, double mu, double k, double y[]) {
-  double U, U1, U2, a, b, r, z, f, c;
+  double U, a, b, r, z, f, c;
+  std::default_random_engine generator;
+  std::uniform_real_distribution<double> distribution1(0.0, 1.0);
+  std::uniform_real_distribution<double> distribution2(0.0, 2.0*M_PI);
 
-  a = 1 + std::sqrt(1+4 * k * k);
-  b = (a - std::sqrt(2*a))/(2* k);
+  a = 1 + std::sqrt(1 + 4 * k * k);
+  b = (a - std::sqrt(2*a))/(2*k);
   r = (1 + b*b)/(2*b);
 
-  arma::vec out(n);
-  arma::vec::iterator i = out.begin() ;
+  int i = 0;
   do {
-    int idx = std::distance(out.begin(), i);
-    z = std::cos(M_PI * arma::as_scalar(arma::randu<arma::vec>(1)));
-    f  = (1. + r * z)/(r + z);
-    c  = k * (r - f);
+    z = std::cos(M_PI * distribution1(generator));
+    f = (1. + r * z)/(r + z);
+    c = k * (r - f);
+    U = distribution1(generator);
 
-    U = arma::as_scalar(arma::randu<arma::vec>(1));
-    // U = R::runif(0, 1);
     if(c * (2 - c) > U) {
-      U1 = arma::as_scalar(arma::randu<arma::vec>(1));
-      *i = (U1 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-      y[idx] = *i;
-      if(k == 0) {
-        *i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));
-        y[idx] = *i;
-      }
+      y[i] = (distribution1(generator) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
+      if(k == 0) {y[i] = distribution2(generator);}
       i++;
     } else {
       if(std::log(c/U) + 1 >= c) {
-        U2 = arma::as_scalar(arma::randu<arma::vec>(1));
-        *i = (U2 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-        y[idx] = *i;
-        if(k == 0) {
-          *i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));
-          y[idx] = *i;
-        }
+        y[i] = (distribution1(generator) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
+        if(k == 0) {y[i] = distribution2(generator);}
         i++;
       }
     }
-  } while(i < out.end());
-
-  return;
+  } while(i < n);
 }
 
 void mexFunction(int nlhs, mxArray *plhs[], /*output*/
                  int nrhs, const mxArray *prhs[]) /* Input variables */
 {
     double *n, *mu, *k, *out;
-    if (nrhs != 3) {      /* Check for proper number of arguments */
+    if (nrhs < 3) {      /* Check for proper number of arguments */
 	    mexErrMsgIdAndTxt( "MATLAB:rvm:invalidNumInputs",
                 "Three input arguments required.");
     }
@@ -59,7 +47,7 @@ void mexFunction(int nlhs, mxArray *plhs[], /*output*/
     k  = mxGetPr(prhs[2]);
 
     /* Create an m-by-n mxArray; you will copy existing data into it */
-    plhs[0] = mxCreateNumericMatrix(*k, 1, mxDOUBLE_CLASS, mxREAL);
+    plhs[0] = mxCreateNumericMatrix(*n, 1, mxDOUBLE_CLASS, mxREAL);
     out     = mxGetPr(plhs[0]);
     rvm(*n, *mu, *k, out);  // call rvm
     return;

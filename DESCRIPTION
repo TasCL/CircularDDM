@@ -4,12 +4,11 @@ Title: Circular Drift-diffusion Model
 Version: 0.0.2
 Authors@R: c(person("Yi-Shin", "Lin", email = "yishin.lin@utas.edu.au",
                     role = c("aut", "cre")),
-  person("Peter", "Kvam", email = "kvam.peter@gmail.com", 
-  role = "aut"),
   person("Andrew", "Heathcote", email = "andrew.heathcote@utas.edu.au", 
-  role = "aut"))
+  role = "aut"),
+  person("Peter", "Kvam", email = "kvam.peter@gmail.com", role = "aut"))
 Depends: R (>= 3.0.2)
-Description: Circular drift-diffusion model for continuous report.  
+Description: Circular drift-diffusion model for continuous reports.  
 License: GPL-2
 Author: Yi-Shin Lin [aut, cre]
 Maintainer: Yi-Shin Lin <yishin.lin@utas.edu.au>

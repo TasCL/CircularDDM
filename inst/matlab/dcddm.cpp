@@ -17,8 +17,6 @@
 #include <armadillo>
 #include <gsl/gsl_sf_bessel.h>
 
-using namespace arma;
-
 arma::vec getVec(double *x, size_t nx) {
   arma::vec out(nx);
   for(int i=0; i<nx; i++) { out[i]=*(x+i); }
@@ -90,7 +88,7 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
 
   if (iter > (MAXIT - 1)) {
     std::cout << "Failed to converge to within tolerance.\n" <<
-      "Try a different initial guess";
+      "Try a different initial guess\n";
     x=INFINITY ;
   }
   return x;
@@ -102,13 +100,13 @@ arma::vec besselzero(double nu, int k, int kind) {
     for (int j=1; j<=3*k; j++) {         // Initial guess of zeros
         x0     = 1 + std::sqrt(2) + (j-1) * M_PI + nu + std::pow(nu, 0.4);
         x(j-1) = findzero(nu, x0, kind);     // Halley's method
-        if (x(j-1) == INFINITY) {std::cout << "Bad guess.";}
+        if (x(j-1) == INFINITY) {std::cout << "Bad guess.\n";}
     }
     if(!x.is_sorted()) { x = sort(x); };
     arma::vec onevec = arma::ones<arma::vec>(1);
     arma::vec dx     = arma::join_vert(onevec, arma::abs(arma::diff(x)));
     arma::vec out    = x(arma::find(dx > 1e-8));
-    if( out.has_nan() ) {std::cout << "NA found.";}
+    if( out.has_nan() ) {std::cout << "NA found.\n";}
     return out.rows(0, k-1);
 }
 
@@ -164,113 +162,56 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 
 }
 
-arma::vec rvm(int n, double mu, double k) {
-  double U, U1, U2, a, b, r, z, f, c;
-
-  a = 1 + std::sqrt(1+4 * k * k);
-  b = (a - std::sqrt(2*a))/(2* k);
-  r = (1 + b*b)/(2*b);
-
-  arma::vec out(n);
-  arma::vec::iterator i = out.begin() ;
-  do {
-    z = std::cos(M_PI * arma::as_scalar(arma::randu<arma::vec>(1)));
-    f  = (1. + r * z)/(r + z);
-    c  = k * (r - f);
-
-    U = arma::as_scalar(arma::randu<arma::vec>(1));
-    if(c * (2 - c) > U) {
-      U1 = arma::as_scalar(arma::randu<arma::vec>(1));
-      *i = (U1 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-      if(k == 0) {*i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
-      i++;
-    } else {
-      if(std::log(c/U) + 1 >= c) {
-        U2 = arma::as_scalar(arma::randu<arma::vec>(1));
-        *i = (U2 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-        if(k == 0) {*i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
-        i++;
-      }
-    }
-  } while(i < out.end());
-
-  return out;
-}
-
-void rddm(int n, double *pvec, size_t npvec, double p, double y1[],
-  double y2[], double y3[])
-  {
+void dcddm(double *X, size_t nrow, size_t ncol, double *pvec, size_t npvec,
+  int k, double y[])
+{
+  arma::mat x    = getMat(X, nrow, ncol);
   arma::vec pVec = getVec(pvec, npvec);
 
-  int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
-  double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
-  arma::vec RT(n), R(n), A(n); // R for responses, A for angle
-  for (int i = 0; i < n; i++) {
-    step = 0; rPos = 0; xPos = 0; yPos = 0;
-    do {
-      theta = arma::as_scalar(rvm(1, 1, 1));
-      xPos  = xPos + std::cos(theta);
-      yPos  = yPos + std::sin(theta);
-      rPos  = std::sqrt(std::pow(xPos, 2) + std::pow(yPos, 2));
-      thPos = std::atan2(yPos, xPos);
-      step++;
-    } while (std::abs(rPos) < pVec[0]);
-
-    // dt = 0; // rexp take scale==mean==mu
-    // for(int j=0; j<step; j++) { dt = dt + R::rexp(p); }
-    // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
-    RT[i] = pVec[3] + arma::as_scalar(arma::randg(1, distr_param((double)step, p)));
-    R[i]  = thPos/2;
-    A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
-  }
-
-  arma::mat tmp = arma::join_horiz(RT, R);
-  arma::mat out = arma::join_horiz(tmp, A);
-
-  for(int j=0; j<n; j++)
+  arma::vec LL_dt   = logLik_dt(x, pVec, k);
+  arma::vec LL_resp = logLik_resp(x, pVec);
+  arma::vec tmp = LL_dt + LL_resp;
+  for(arma::vec::iterator i=tmp.begin(); i!=tmp.end(); ++i)
   {
-    y1[j] = RT[j];
-    y2[j] = R[j];
-    y3[j] = A[j];
+    int idx = std::distance(tmp.begin(), i);
+    y[idx] = *i;
   }
-
 }
-
-// arma::mat rddm(int n, arma::vec pVec, double p=.15)
 
 void mexFunction(int nlhs, mxArray *plhs[], /*output*/
                  int nrhs, const mxArray *prhs[]) /* Input variables */
 {
-  double *n, *pvec, *p, *y1, *y2, *y3;
-  size_t npvec;
+    double *X, *pvec, *k, *out; /* pointers to input matrices and output*/
+    size_t nrow, ncol, npvec;     /* matrix dimensions */
 
-  if (nrhs != 3) {
-       mexErrMsgIdAndTxt("MATLAB:rddm:rhs",
+    /* Check for proper number of arguments */
+    if (nrhs != 3) {
+       mexErrMsgIdAndTxt("MATLAB:dddm:rhs",
                       "This function requires 3 input arguments.");
-  }
+    }
 
-  n     = mxGetPr(prhs[0]); /* pointer to first input matrix  */
+  X     = mxGetPr(prhs[0]); /* pointer to first input matrix  */
   pvec  = mxGetPr(prhs[1]); /* pointer to second input matrix */
-  p     = mxGetPr(prhs[2]); /* precision */
+  k     = mxGetPr(prhs[2]); /* precision */
+  nrow  = mxGetM(prhs[0]);  /* dimensions of input matrices   */
+  ncol  = mxGetN(prhs[0]);
   npvec = mxGetN(prhs[1]);  /* number of parameter */
-  int n_in = (int)(*n);
 
   /* Validate input arguments */
+  if (ncol != 2) {
+    mexErrMsgIdAndTxt("MATLAB:dddm:invalidInputType",
+      "Input matrix must be 2 columns.");
+  }
   if (npvec != 5) {
-    mexErrMsgIdAndTxt("MATLAB:rddm:invalidInputType",
+    mexErrMsgIdAndTxt("MATLAB:dddm:invalidInputType",
       "pVec must be a 5-parameter vector.");
   }
 
-  /* Create an n x 3 mxArray */
-  plhs[0] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  plhs[1] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  plhs[2] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  y1 = mxGetPr(plhs[0]);
-  y2 = mxGetPr(plhs[1]);
-  y3 = mxGetPr(plhs[2]);
-
-  rddm(n_in, pvec, npvec, *p, y1, y2, y3);  // call rddm
-
+  /* Create an m x 1 mxArray */
+  plhs[0] = mxCreateNumericMatrix( mwSize(nrow), 1, mxDOUBLE_CLASS, mxREAL);
+  out     = mxGetPr(plhs[0]);
+  dcddm(X, nrow, ncol, pvec, npvec, *k, out);  // call logLik_dt
+  return;
 }
 
 

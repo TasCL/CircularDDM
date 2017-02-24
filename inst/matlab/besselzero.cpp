@@ -47,7 +47,7 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
 
   if (iter > (MAXIT - 1)) {
     std::cout << "Failed to converge to within tolerance.\n" <<
-      "Try a different initial guess";
+      "Try a different initial guess\n";
     x=INFINITY ;
   }
 

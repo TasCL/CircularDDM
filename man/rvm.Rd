@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{rvm}
 \alias{rvm}
-\title{Von Mises Distribution: Random Number Generator}
+\title{Generate random deviates for the von Mises distribution}
 \usage{
 rvm(n, mu, k)
 }
@@ -18,7 +18,16 @@ distribution}
 a vector
 }
 \description{
-Generate random numbers for von Mises circular distribution.
+Generate random deviates fro the von Mises distribution.
+}
+\details{
+A random variable for circular normal distribution has the form:\cr
+\deqn{f(theta; mu, kappa) = 1 / (2*pi*I_0(kappa)) * exp(kappa * cos(theta-mu))}
+0 <= theta <= 2*pi
+
+I_0(kappa) in the normalizing constant is the modified Bessel function of
+the first kind and order zero. It is given by:\cr
+\deqn{I_0(kappa) = 1/2*pi $$\int_{0}^{2*pi} exp(k*cos(theta)) dtheta$$}
 }
 \examples{
 n  <- 100
