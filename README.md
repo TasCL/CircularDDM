@@ -67,7 +67,7 @@ help('rvonmises')
 ```
 
 MATLAB package requires:
-- GNU gsl 1.16 (gsl require CBLAS)
+- GNU gsl 1.16 (gsl requires CBLAS)
 - Armadillo ( >= 0.6.700.6.0)
 - Armadillo requires LAPACK and BLAS or OpenBLAS (alread including LAPACK), or
 Intel Math Kernel Library (MKL)
