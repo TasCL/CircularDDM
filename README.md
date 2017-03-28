@@ -2,8 +2,8 @@
 
 CircularDDM implements circular drift-diffusion model, using Armadillo C++.  
 MATLAB callable functions reside in inst/matlab folder.  Currently, we provide 
-only Linux binary (mexa64 files compiled by g++ 5.4.0). If the supporting 
-libraries, GNU gsl and armadillo C++ (requiring LAPACK and BLAS) are installed,
+only Linux binary (mexa64 files compiled by g++ 5.4.0). If the libraries, 
+GNU gsl and armadillo C++ (requiring LAPACK and BLAS), are installed,
 one should be able to compile the source codes in other systems, such as 
 Windows (mexw64 files) and OS X (mexmaci64 files).  
 
@@ -41,7 +41,7 @@ hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 ## From github
 devtools::install_github("TasCL/CircularDDM")
 ## From source: 
-install.packages("CircularDDM_0.0.4.tar.gz", repos = NULL, type="source")
+install.packages("CircularDDM_0.0.5.tar.gz", repos = NULL, type="source")
 ```
 
 R package requires:
