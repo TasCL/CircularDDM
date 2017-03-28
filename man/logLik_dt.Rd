@@ -11,13 +11,12 @@ logLik_dt(x, pVec, k = 141L)
 continuous responses/reports/outcomes. Each row is a trial.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
-or [thresh, mu1, mu2, ndt, sigmasq].}
+a stands for response threshold, vx is the drift rate along x axis,
+vy is the drift rate along y axis, t0 is the non-decision time, and s
+is the within-trial standard deviation.}
 
 \item{k}{a precision for bessel function. The larger the k is, the larger
 the memory space is required. Default is 141.}
-
-\item{log}{a switch to return log-likelihood or just likelihood. Default
-is to return log-likelihood}
 }
 \value{
 a vector
@@ -32,7 +31,8 @@ RT=c(1.2595272, 0.8693937, 0.8009044, 1.0018933, 2.3640007, 1.0521304),
 R =c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 )
 pVec <- c(a=2.45, vx=1.5, vy=1.25, t0=.1, s=1)
-den  <- logLik_dt(x, pVec=pVec); den
+den  <- logLik_dt(x, pVec=pVec);
+den
 }
 \references{
 Smith, P. L. (2016). Diffusion Theory of Decision Making in

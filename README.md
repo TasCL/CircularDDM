@@ -2,10 +2,10 @@
 
 CircularDDM implements circular drift-diffusion model, using Armadillo C++.  
 MATLAB callable functions reside in inst/matlab folder.  Currently, we provide 
-only Linux binary (*.mexa64 compiled by g++ 5.4.0). If the supporting 
+only Linux binary (mexa64 files compiled by g++ 5.4.0). If the supporting 
 libraries, GNU gsl and armadillo C++ (requiring LAPACK and BLAS) are installed,
 one should be able to compile the source codes in other systems, such as 
-Windows (*.mexw64) and OS X (*.mexmaci64).  
+Windows (mexw64 files) and OS X (mexmaci64 files).  
 
 ## Getting Started
 

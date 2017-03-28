@@ -3,15 +3,14 @@
 
 #' Generate random deviates for the von Mises distribution
 #'
-#' Generate random deviates fro the von Mises distribution.
+#' Generate random deviates for the von Mises distribution.
 #'
 #' A random variable for circular normal distribution has the form:\cr
-#' \deqn{f(theta; mu, kappa) = 1 / (2*pi*I_0(kappa)) * exp(kappa * cos(theta-mu))}
-#' 0 <= theta <= 2*pi
+#' \deqn{f(theta; mu, kappa) = 1 / (2 * pi * I0(kappa)) * exp(kappa * cos(theta-mu))}
+#' theta is withins 0 and 2 * pi.
 #'
-#' I_0(kappa) in the normalizing constant is the modified Bessel function of
-#' the first kind and order zero. It is given by:\cr
-#' \deqn{I_0(kappa) = 1/2*pi $$\int_{0}^{2*pi} exp(k*cos(theta)) dtheta$$}
+#' \code{I0(kappa)} in the normalizing constant is the modified Bessel
+#' function of the first kind and order zero.
 #'
 #' @param n number of observations.
 #' @param mu mean direction of the distribution.
@@ -70,8 +69,6 @@ besselzero <- function(nu, k, kind) {
 #' continuous responses/reports/outcomes. Each row is a trial.
 #' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
 #' or [thresh, mu1, mu2, ndt, sigmasq], using alternative names.
-#' @param log a switch to return log-likelihood or just likelihood. Default
-#' is to return log-likelihood
 #'
 #' @return a vector
 #' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -96,11 +93,11 @@ logLik_resp <- function(x, pVec) {
 #' @param x a matrix storing a first column as RT and a second column of
 #' continuous responses/reports/outcomes. Each row is a trial.
 #' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
-#' or [thresh, mu1, mu2, ndt, sigmasq].
+#' a stands for response threshold, vx is the drift rate along x axis,
+#' vy is the drift rate along y axis, t0 is the non-decision time, and s
+#' is the within-trial standard deviation.
 #' @param k a precision for bessel function. The larger the k is, the larger
 #' the memory space is required. Default is 141.
-#' @param log a switch to return log-likelihood or just likelihood. Default
-#' is to return log-likelihood
 #'
 #' @return a vector
 #' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -111,7 +108,8 @@ logLik_resp <- function(x, pVec) {
 #' R =c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 #' )
 #' pVec <- c(a=2.45, vx=1.5, vy=1.25, t0=.1, s=1)
-#' den  <- logLik_dt(x, pVec=pVec); den
+#' den  <- logLik_dt(x, pVec=pVec);
+#' den
 #' @export
 logLik_dt <- function(x, pVec, k = 141L) {
     .Call('CircularDDM_logLik_dt', PACKAGE = 'CircularDDM', x, pVec, k)

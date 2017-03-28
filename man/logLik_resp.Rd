@@ -12,9 +12,6 @@ continuous responses/reports/outcomes. Each row is a trial.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
 or [thresh, mu1, mu2, ndt, sigmasq], using alternative names.}
-
-\item{log}{a switch to return log-likelihood or just likelihood. Default
-is to return log-likelihood}
 }
 \value{
 a vector

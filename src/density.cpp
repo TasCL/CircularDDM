@@ -32,15 +32,14 @@ arma::vec besselJ(arma::vec x, double nu=1) {
 
 //' Generate random deviates for the von Mises distribution
 //'
-//' Generate random deviates fro the von Mises distribution.
+//' Generate random deviates for the von Mises distribution.
 //'
 //' A random variable for circular normal distribution has the form:\cr
-//' \deqn{f(theta; mu, kappa) = 1 / (2*pi*I_0(kappa)) * exp(kappa * cos(theta-mu))}
-//' 0 <= theta <= 2*pi
+//' \deqn{f(theta; mu, kappa) = 1 / (2 * pi * I0(kappa)) * exp(kappa * cos(theta-mu))}
+//' theta is withins 0 and 2 * pi.
 //'
-//' I_0(kappa) in the normalizing constant is the modified Bessel function of
-//' the first kind and order zero. It is given by:\cr
-//' \deqn{I_0(kappa) = 1/2*pi $$\int_{0}^{2*pi} exp(k*cos(theta)) dtheta$$}
+//' \code{I0(kappa)} in the normalizing constant is the modified Bessel
+//' function of the first kind and order zero.
 //'
 //' @param n number of observations.
 //' @param mu mean direction of the distribution.
@@ -59,26 +58,26 @@ arma::vec besselJ(arma::vec x, double nu=1) {
 arma::vec rvm(int n, double mu, double k) {
   double U, a, b, r, z, f, c;
 
-  a = 1 + std::sqrt(1+4 * k * k);
-  b = (a - std::sqrt(2*a))/(2* k);
+  a = 1 + std::sqrt(1.0 + 4.0 * k * k);
+  b = (a - std::sqrt(2.0 * a)) / (2.0 * k);
   r = (1 + b*b)/(2*b);
 
   arma::vec out(n);
   arma::vec::iterator i = out.begin() ;
   do {
-    z  = std::cos(M_PI * R::runif(0,1));
+    z  = std::cos(M_PI * R::runif(0, 1.0));
     f  = (1. + r * z)/(r + z);
     c  = k * (r - f);
 
-    U = R::runif(0, 1);
+    U = R::runif(0, 1.0);
     if(c * (2 - c) > U) {
       *i = (R::runif(0,1) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-      if(k == 0) { *i = R::runif(0, 2*M_PI); }
+      if(k == 0) { *i = R::runif(0, 2.0*M_PI); }
       i++;
     } else {
-      if(std::log(c/U) + 1 >= c) {
-        *i = (R::runif(0,1) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-        if(k == 0) { *i = R::runif(0, 2*M_PI); }
+      if(std::log(c/U) + 1.0 >= c) {
+        *i = (R::runif(0, 1.0) > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
+        if(k == 0) { *i = R::runif(0, 2.0*M_PI); }
         i++;
       }
     }
@@ -88,7 +87,7 @@ arma::vec rvm(int n, double mu, double k) {
 }
 
 inline double findzero(double n, double x0, int kind, double tol=1e-12,
-  int MAXIT=100, double err=1) {
+  int MAXIT=100, double err=1.0) {
   // Tolerance; Maximum number of times to iterate; Initial error
 
   double a, b, x, n1=n+1;
@@ -112,15 +111,15 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
       a = 0;
       b = 0;
     }
-    err  = (2*a*x0*(n*a - b*x0) ) /
-      ( 2*b*b*x0*x0 - a*b*x0*(4*n1) + (n*n1+x0*x0)*a*a );
+    err  = (2.0*a*x0*(n*a - b*x0) ) /
+      ( 2.0*b*b*x0*x0 - a*b*x0*(4.0 * n1) + (n*n1+x0*x0)*a*a );
     x    = x0 - err;
     x0   = x;
     iter = iter + 1;
   } while ( (std::abs(err) > tol) & (iter < MAXIT) );
 
   if (iter > (MAXIT - 1)) {
-    std::cout << "Failed to converge to within tolerance.\n" <<
+    Rcpp::Rcout << "Failed to converge within tolerance.\n" <<
       "Try a different initial guess";
     x=INFINITY ;
   }
@@ -163,7 +162,7 @@ arma::vec besselzero(double nu, int k, int kind) {
   arma::vec x = arma::zeros<arma::vec>(3*k);
   for (int j=1; j<=3*k; j++) {
     // Initial guess of zeros
-    x0     = 1 + std::sqrt(2) + (j-1) * M_PI + nu + std::pow(nu, 0.4);
+    x0     = 1 + std::sqrt(2.0) + (j-1) * M_PI + nu + std::pow(nu, 0.4);
     x(j-1) = findzero(nu, x0, kind);     // Halley's method
     if (x(j-1) == INFINITY) {Rcpp::stop("Bad guess.");}
   }
@@ -184,8 +183,6 @@ arma::vec besselzero(double nu, int k, int kind) {
 //' continuous responses/reports/outcomes. Each row is a trial.
 //' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
 //' or [thresh, mu1, mu2, ndt, sigmasq], using alternative names.
-//' @param log a switch to return log-likelihood or just likelihood. Default
-//' is to return log-likelihood
 //'
 //' @return a vector
 //' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -212,7 +209,7 @@ arma::vec logLik_resp(arma::mat x, arma::vec pVec) {
   term0 = pVec[0] / pVec[4];
   term1 = trans(pMat.row(1)) % arma::cos(choices);
   term2 = trans(pMat.row(2)) % arma::sin(choices);
-  term3 = (0.5 * pVec[4]) * ( std::pow(pVec[1], 2) + std::pow(pVec[2], 2) );
+  term3 = (0.5 * pVec[4]) * ( std::pow(pVec[1], 2.0) + std::pow(pVec[2], 2.0) );
 
   term0_vec = arma::repmat(term0, n, 1);
   term3_vec = arma::repmat(term3, n, 1);
@@ -230,11 +227,11 @@ arma::vec logLik_resp(arma::mat x, arma::vec pVec) {
 //' @param x a matrix storing a first column as RT and a second column of
 //' continuous responses/reports/outcomes. Each row is a trial.
 //' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
-//' or [thresh, mu1, mu2, ndt, sigmasq].
+//' a stands for response threshold, vx is the drift rate along x axis,
+//' vy is the drift rate along y axis, t0 is the non-decision time, and s
+//' is the within-trial standard deviation.
 //' @param k a precision for bessel function. The larger the k is, the larger
 //' the memory space is required. Default is 141.
-//' @param log a switch to return log-likelihood or just likelihood. Default
-//' is to return log-likelihood
 //'
 //' @return a vector
 //' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -245,7 +242,8 @@ arma::vec logLik_resp(arma::mat x, arma::vec pVec) {
 //' R =c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 //' )
 //' pVec <- c(a=2.45, vx=1.5, vy=1.25, t0=.1, s=1)
-//' den  <- logLik_dt(x, pVec=pVec); den
+//' den  <- logLik_dt(x, pVec=pVec);
+//' den
 //' @export
 // [[Rcpp::export]]
 arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
@@ -265,10 +263,10 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
   {
     idx        = std::distance(rts.begin(), i);
     dt         = *i - pVec[3];
-    tmp        = -0.5 * pVec[4] * dt / std::pow(pVec[0] , 2);
+    tmp        = -0.5 * pVec[4] * dt / std::pow(pVec[0] , 2.0);
     scalar     = tmp;
     scalar_vec = arma::repmat(scalar, k, 1);
-    out[idx]   = pVec[4] / std::pow(pVec[0], 2) *
+    out[idx]   = pVec[4] / std::pow(pVec[0], 2.0) *
       arma::accu(j0k / J1 % arma::exp(scalar_vec % j0k2));
     // When RT and t0 is almost identical, we deem it unlikely.
     if ((*i - pVec[3]) < 0.01) {out[idx] = 1e-10;} //
@@ -333,7 +331,7 @@ arma::mat rcddm(int n, arma::vec pVec, double p=0.15) {
       theta = arma::as_scalar(rvm(1, 1, 1));
       xPos  = xPos + std::cos(theta);
       yPos  = yPos + std::sin(theta);
-      rPos  = std::sqrt(std::pow(xPos, 2) + std::pow(yPos, 2));
+      rPos  = std::sqrt(std::pow(xPos, 2.0) + std::pow(yPos, 2.0));
       thPos = std::atan2(yPos, xPos);
       step++;
     } while (std::abs(rPos) < pVec[0]);

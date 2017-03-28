@@ -18,16 +18,15 @@ distribution}
 a vector
 }
 \description{
-Generate random deviates fro the von Mises distribution.
+Generate random deviates for the von Mises distribution.
 }
 \details{
 A random variable for circular normal distribution has the form:\cr
-\deqn{f(theta; mu, kappa) = 1 / (2*pi*I_0(kappa)) * exp(kappa * cos(theta-mu))}
-0 <= theta <= 2*pi
+\deqn{f(theta; mu, kappa) = 1 / (2 * pi * I0(kappa)) * exp(kappa * cos(theta-mu))}
+theta is withins 0 and 2 * pi.
 
-I_0(kappa) in the normalizing constant is the modified Bessel function of
-the first kind and order zero. It is given by:\cr
-\deqn{I_0(kappa) = 1/2*pi $$\int_{0}^{2*pi} exp(k*cos(theta)) dtheta$$}
+\code{I0(kappa)} in the normalizing constant is the modified Bessel
+function of the first kind and order zero.
 }
 \examples{
 n  <- 100
