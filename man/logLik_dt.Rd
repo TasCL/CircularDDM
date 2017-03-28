@@ -38,4 +38,3 @@ den  <- logLik_dt(x, pVec=pVec); den
 Smith, P. L. (2016). Diffusion Theory of Decision Making in
 Continuous Report, Psychological Review, 123 (4), 425--451.
 }
-

@@ -205,10 +205,15 @@ void rcddm(int n, double *pvec, size_t npvec, double p, double y1[],
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
   arma::vec RT(n), R(n), A(n); // R for responses, A for angle
+
+  // page 435 in Smith (2016) equation (29)
+  double mu = std::atan2(pVec[2], pVec[1]);
+  double k  = std::sqrt(pVec[2]*pVec[2]+pVec[1]*pVec[1]) / pVec[4];
+
   for (int i = 0; i < n; i++) {
     step = 0; rPos = 0; xPos = 0; yPos = 0;
     do {
-      theta = arma::as_scalar(rvm(1, 1, 1));
+      theta = arma::as_scalar(rvm(1, mu, k));
       xPos  = xPos + std::cos(theta);
       yPos  = yPos + std::sin(theta);
       rPos  = std::sqrt(std::pow(xPos, 2) + std::pow(yPos, 2));
@@ -220,8 +225,11 @@ void rcddm(int n, double *pvec, size_t npvec, double p, double y1[],
     // for(int j=0; j<step; j++) { dt = dt + R::rexp(p); }
     // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
     RT[i] = pVec[3] + arma::as_scalar(arma::randg(1, distr_param((double)step, p)));
-    R[i]  = thPos/2;
-    A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
+    R[i]  = thPos;
+    A[i]  = fmod(thPos + 2.0*M_PI, 2.0*M_PI);
+    // R[i]  = thPos/2;
+    //A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
+
   }
 
   arma::mat tmp = arma::join_horiz(RT, R);

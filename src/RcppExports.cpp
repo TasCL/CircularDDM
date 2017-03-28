@@ -57,29 +57,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// dddm
-arma::vec dddm(arma::mat x, arma::vec pVec, int k);
-RcppExport SEXP CircularDDM_dddm(SEXP xSEXP, SEXP pVecSEXP, SEXP kSEXP) {
+// dcddm
+arma::vec dcddm(arma::mat x, arma::vec pVec, int k);
+RcppExport SEXP CircularDDM_dcddm(SEXP xSEXP, SEXP pVecSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
     Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(dddm(x, pVec, k));
+    rcpp_result_gen = Rcpp::wrap(dcddm(x, pVec, k));
     return rcpp_result_gen;
 END_RCPP
 }
-// rddm
-arma::mat rddm(int n, arma::vec pVec, double p);
-RcppExport SEXP CircularDDM_rddm(SEXP nSEXP, SEXP pVecSEXP, SEXP pSEXP) {
+// rcddm
+arma::mat rcddm(int n, arma::vec pVec, double p);
+RcppExport SEXP CircularDDM_rcddm(SEXP nSEXP, SEXP pVecSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
     Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(rddm(n, pVec, p));
+    rcpp_result_gen = Rcpp::wrap(rcddm(n, pVec, p));
     return rcpp_result_gen;
 END_RCPP
 }

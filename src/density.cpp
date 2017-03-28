@@ -281,49 +281,49 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 //' The Circular Drift-diffusion Distribution
 //'
 //' Density function and random generation for the circular drift-diffusion
-//' model with theta vector equal to \code{pVec}.  \code{dddm} is the
-//' equation (23) in p 433 in Smith (2016).
+//' model with theta vector equal to \code{pVec}.  \code{dcddm} is the
+//' equation (23) on page 433 in Smith (2016).
 //'
 //' @param x a matrix storing a first column as RT and a second column of
 //' continuous responses/reports/outcomes. Each row is a trial.
 //' @param n number of observations.
 //' @param pVec a parameter vector with the order [a, vx, vy, t0, s],
 //' or [thresh, mu1, mu2, ndt, sigmasq]. The order matters.
-//' @param k a precision for calculating the infinite series in \code{dddm}. The
+//' @param k a precision for calculating the infinite series in \code{dcddm}. The
 //' larger the k is, the larger the memory space is required. Default is 141.
-//' @param p a precision for random walk step in \code{rddm}. Default is 0.15
+//' @param p a precision for random walk step in \code{rcddm}. Default is 0.15
 //' second
-//' @return \code{dddm} gives a log-likelihood vector. \code{rddm} generates
+//' @return \code{dcddm} gives a log-likelihood vector. \code{rddm} generates
 //' random deviates, returning a n x 3 matrix with the columns: RTs, choices
 //' and then angles.
 //' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
 //' Continuous Report, Psychological Review, 123 (4), 425--451.
 //' @examples
-//' ## dddm example
+//' ## dcddm example
 //' x <- cbind(
 //' RT= c(1.2595272, 0.8693937, 0.8009044, 1.0018933, 2.3640007, 1.0521304),
 //' R = c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 //' )
 //' pVec <- c(a=2.45, vx=1.5, vy=1.25, t0=.1, s=1)
-//' dddm(x, pVec)
+//' dcddm(x, pVec)
 //'
-//' ## rddm example
+//' ## rcddm example
 //' pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
-//' den  <- rddm(1e3, pVec);
+//' den  <- rcddm(1e3, pVec);
 //' hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
 //' hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 //' @export
 // [[Rcpp::export]]
-arma::vec dddm(arma::mat x, arma::vec pVec, int k=141) {
+arma::vec dcddm(arma::mat x, arma::vec pVec, int k=141) {
   arma::vec LL_dt   = logLik_dt(x, pVec, k);
   arma::vec LL_resp = logLik_resp(x, pVec);
   return LL_dt + LL_resp;
 }
 
-//' @rdname dddm
+//' @rdname dcddm
 //' @export
 // [[Rcpp::export]]
-arma::mat rddm(int n, arma::vec pVec, double p=.15) {
+arma::mat rcddm(int n, arma::vec pVec, double p=0.15) {
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
   arma::vec RT(n), R(n), A(n); // R for responses, A for angle
@@ -343,7 +343,8 @@ arma::mat rddm(int n, arma::vec pVec, double p=.15) {
     // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
     RT[i] = pVec[3] + R::rgamma(step, p); // gamma a=shape b=scale=1/rate
     R[i]  = thPos/2;
-    A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
+    A[i]  = fmod(thPos + 2.0 * M_PI, 2 * M_PI);
+    // A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
   }
 
   arma::mat tmp = arma::join_horiz(RT, R);

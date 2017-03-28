@@ -1,7 +1,7 @@
 Package: CircularDDM
 Type: Package
 Title: Circular Drift-diffusion Model 
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: c(person("Yi-Shin", "Lin", email = "yishin.lin@utas.edu.au",
                     role = c("aut", "cre")),
   person("Andrew", "Heathcote", email = "andrew.heathcote@utas.edu.au", 
@@ -12,9 +12,9 @@ Description: Circular drift-diffusion model for continuous reports.
 License: GPL-2
 Author: Yi-Shin Lin [aut, cre]
 Maintainer: Yi-Shin Lin <yishin.lin@utas.edu.au>
-Date/Publication: 2017-01-20 15:45:30
+Date/Publication: 2017-03-29 15:45:30
 LazeData: TRUE
 Imports: Rcpp (>= 0.12.3)
 LinkingTo: Rcpp (>= 0.12.3), RcppArmadillo (>= 0.6.700.6.0)
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 NeedsCompilation: yes
