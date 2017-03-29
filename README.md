@@ -41,7 +41,7 @@ hist(den[,3], breaks = "fd", xlab="Response Angle", main="Density")
 ## From github
 devtools::install_github("TasCL/CircularDDM")
 ## From source: 
-install.packages("CircularDDM_0.0.5.tar.gz", repos = NULL, type="source")
+install.packages("CircularDDM_0.0.6.tar.gz", repos = NULL, type="source")
 ```
 
 R package requires:

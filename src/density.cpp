@@ -325,10 +325,15 @@ arma::mat rcddm(int n, arma::vec pVec, double p=0.15) {
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
   arma::vec RT(n), R(n), A(n); // R for responses, A for angle
+
+  // page 435 in Smith (2016) equation (29)
+  double mu = std::atan2(pVec[2], pVec[1]);
+  double k  = std::sqrt(pVec[2]*pVec[2]+pVec[1]*pVec[1]) / pVec[4];
+
   for (int i = 0; i < n; i++) {
     step = 0; rPos = 0; xPos = 0; yPos = 0;
     do {
-      theta = arma::as_scalar(rvm(1, 1, 1));
+      theta = arma::as_scalar(rvm(1, mu, k)); // add mu, k here instead of 1, 1
       xPos  = xPos + std::cos(theta);
       yPos  = yPos + std::sin(theta);
       rPos  = std::sqrt(std::pow(xPos, 2.0) + std::pow(yPos, 2.0));
