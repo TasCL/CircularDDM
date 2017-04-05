@@ -83,3 +83,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcddm_ext
+arma::mat rcddm_ext(int n, arma::vec pVec, arma::vec angle, double p);
+RcppExport SEXP CircularDDM_rcddm_ext(SEXP nSEXP, SEXP pVecSEXP, SEXP angleSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type angle(angleSEXP);
+    Rcpp::traits::input_parameter< double >::type p(pSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcddm_ext(n, pVec, angle, p));
+    return rcpp_result_gen;
+END_RCPP
+}

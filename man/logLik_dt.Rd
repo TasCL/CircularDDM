@@ -7,23 +7,24 @@
 logLik_dt(x, pVec, k = 141L)
 }
 \arguments{
-\item{x}{a matrix storing a first column as RT and a second column of
-continuous responses/reports/outcomes. Each row is a trial.}
+\item{x}{a matrix storing a first column of RT and a second column of
+continuous responses/reports. Each row is a trial.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
 a stands for response threshold, vx is the drift rate along x axis,
 vy is the drift rate along y axis, t0 is the non-decision time, and s
-is the within-trial standard deviation.}
+is the within-trial variance.}
 
 \item{k}{a precision for bessel function. The larger the k is, the larger
 the memory space is required. Default is 141.}
 }
 \value{
-a vector
+a column vector
 }
 \description{
 Calculate circular log-likelihood of the first passage time, using
-equation (22) on p 432.
+equation (22) on page 432. Note this function return log density, but
+equation (22) describes density.
 }
 \examples{
 x <- cbind(

@@ -11,10 +11,11 @@ logLik_resp(x, pVec)
 continuous responses/reports/outcomes. Each row is a trial.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
-or [thresh, mu1, mu2, ndt, sigmasq], using alternative names.}
+decision threshold, drift rate along x axis,  drift rate along y axis,
+non-decision time, and the variance for within trial variability.}
 }
 \value{
-a vector
+a column vector
 }
 \description{
 Calculate log-likelihood of the continuous reports, using

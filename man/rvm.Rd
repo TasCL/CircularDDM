@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{rvm}
 \alias{rvm}
-\title{Generate random deviates for the von Mises distribution}
+\title{Generate random deviates from a von Mises distribution}
 \usage{
 rvm(n, mu, k)
 }
@@ -11,19 +11,20 @@ rvm(n, mu, k)
 
 \item{mu}{mean direction of the distribution.}
 
-\item{k}{non-negative numeric value for the concentration parameter of the
-distribution}
+\item{k}{kappa paramter. A non-negative numeric value for the concentration
+parameter of the distribution.}
 }
 \value{
-a vector
+a column vector
 }
 \description{
-Generate random deviates for the von Mises distribution.
+This function generates random deviates from a von Mises distribution with
+parameters, mu and k.
 }
 \details{
-A random variable for circular normal distribution has the form:\cr
+A random deviate for a circular normal distribution has the form:\cr
 \deqn{f(theta; mu, kappa) = 1 / (2 * pi * I0(kappa)) * exp(kappa * cos(theta-mu))}
-theta is withins 0 and 2 * pi.
+theta is within 0 and 2 * pi.
 
 \code{I0(kappa)} in the normalizing constant is the modified Bessel
 function of the first kind and order zero.
@@ -32,6 +33,6 @@ function of the first kind and order zero.
 n  <- 100
 mu <- 0
 k  <- 10
-vm3_de <- rvm(n, mu, k)       ## in degree unit
-vm3_pi <- vm3_de \%\% (2 * pi)  ## in radian unit
+vm_de <- rvm(n, mu, k)       ## in degree unit
+vm_pi <- vm3_de \%\% (2 * pi)  ## in radian unit
 }

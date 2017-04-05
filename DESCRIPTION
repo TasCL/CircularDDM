@@ -1,15 +1,25 @@
 Package: CircularDDM
-Type: Package
-Title: Circular Drift-diffusion Model 
-Version: 0.0.6
-Author: Yi-Shin Lin [aut, cre], Andrew Heathcote [aut], Peter Kvam [aut]
+Version: 0.1.1
+Date: 2017-04-05
+Title: Circular Drift-Diffusion Model
+Authors@R: c(person("Yi-Shin", "Lin", role = c("aut", "cre"),
+                     email = "yishin.lin@utas.edu.au"),
+             person("Andrew", "Heathcote", role = "aut",
+                     email = "andrew.heathcote@utas.edu.au"),
+             person("Peter", "Kvam", role = "aut",
+                     email = "kvam.peter@gmail.com"))
+Author: Yi-Shin Lin [aut, cre],
+  Andrew Heathcote [aut],
+  Peter Kvam [aut]
 Maintainer: Yi-Shin Lin <yishin.lin@utas.edu.au>
 Depends: R (>= 3.0.2)
-Description: Circular drift-diffusion model for continuous reports.  
+Description: Circular drift-diffusion model for continuous reports. This 
+   package implements the density function and the random number generator for 
+   circular drift-diffusion model described in Smith (2016). For circular 
+   drift-diffusion model, the random number refers to response time and 
+   response angles. Both are continuous. Most functions are implemented in 
+   Armadillo C++ via RcppArmadillo.
 License: GPL-2
-Author: Yi-Shin Lin [aut, cre]
-Maintainer: Yi-Shin Lin <yishin.lin@utas.edu.au>
-Date/Publication: 2017-03-29 15:45:30
 LazyData: TRUE
 Imports: Rcpp (>= 0.12.3)
 LinkingTo: Rcpp (>= 0.12.3), RcppArmadillo (>= 0.6.700.6.0)

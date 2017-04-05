@@ -9,6 +9,7 @@ extern SEXP CircularDDM_logLik_resp(SEXP, SEXP);
 extern SEXP CircularDDM_logLik_dt(SEXP, SEXP, SEXP);
 extern SEXP CircularDDM_dcddm(SEXP, SEXP, SEXP);
 extern SEXP CircularDDM_rcddm(SEXP, SEXP, SEXP);
+extern SEXP CircularDDM_rcddm_ext(SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"CircularDDM_rvm", (DL_FUNC) &CircularDDM_rvm, 3},
@@ -17,6 +18,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"CircularDDM_logLik_dt", (DL_FUNC) &CircularDDM_logLik_dt, 3},
   {"CircularDDM_dcddm", (DL_FUNC) &CircularDDM_dcddm, 3},
   {"CircularDDM_rcddm", (DL_FUNC) &CircularDDM_rcddm, 3},
+  {"CircularDDM_rcddm_ext", (DL_FUNC) &CircularDDM_rcddm_ext, 4},
   {NULL, NULL, 0}
 };
 

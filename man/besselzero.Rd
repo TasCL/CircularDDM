@@ -18,7 +18,7 @@ besselzero(nu, k, kind)
 a vector
 }
 \description{
-Find first k positive zeros of the Bessel function J(n,x) or Y(n,x)
+Find first k positive zeros of the Bessel function J(n, x) or Y(n, x)
 using Halley's method.
 }
 \examples{
