@@ -10,7 +10,7 @@ logLik_dt(x, pVec, k = 141L)
 \item{x}{a matrix storing a first column of RT and a second column of
 continuous responses/reports. Each row is a trial.}
 
-\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
+\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s].
 a stands for response threshold, vx is the drift rate along x axis,
 vy is the drift rate along y axis, t0 is the non-decision time, and s
 is the within-trial variance.}
@@ -23,8 +23,9 @@ a column vector
 }
 \description{
 Calculate circular log-likelihood of the first passage time, using
-equation (22) on page 432. Note this function return log density, but
-equation (22) describes density.
+equation (22) on page 432. Note this function return log density so as to
+be compatiable with \code{logLik_resp}. Equation (22) in Smith (2016)
+describes density.
 }
 \examples{
 x <- cbind(

@@ -7,12 +7,13 @@
 logLik_resp(x, pVec)
 }
 \arguments{
-\item{x}{a matrix storing a first column as RT and a second column of
-continuous responses/reports/outcomes. Each row is a trial.}
+\item{x}{a matrix storing a first column of RT and a second column of
+continuous responses/reports. Each row is a trial.}
 
-\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
+\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s], which are
 decision threshold, drift rate along x axis,  drift rate along y axis,
-non-decision time, and the variance for within trial variability.}
+non-decision time, and the variance (not standard deviation) of or within
+trial variability.}
 }
 \value{
 a column vector
@@ -21,8 +22,13 @@ a column vector
 Calculate log-likelihood of the continuous reports, using
 part part in equation (23) on p 433.
 }
+\details{
+This function does not do 'exp' in Smith (2016, p433), so it calculates
+log-likelihood, instead of just likelihood.
+}
 \examples{
-x <- cbind(
+## An example data, showing the format of input data to logLik_resp
+x <- cbind (
 RT=c(1.2595272, 0.8693937, 0.8009044, 1.0018933, 2.3640007, 1.0521304),
 R =c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 )

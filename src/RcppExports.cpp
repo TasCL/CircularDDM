@@ -70,30 +70,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcddm
-arma::mat rcddm(int n, arma::vec pVec, double p);
-RcppExport SEXP CircularDDM_rcddm(SEXP nSEXP, SEXP pVecSEXP, SEXP pSEXP) {
+// rcddm1
+arma::mat rcddm1(int n, arma::vec pVec, double p);
+RcppExport SEXP CircularDDM_rcddm1(SEXP nSEXP, SEXP pVecSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
     Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcddm(n, pVec, p));
+    rcpp_result_gen = Rcpp::wrap(rcddm1(n, pVec, p));
     return rcpp_result_gen;
 END_RCPP
 }
-// rcddm_ext
-arma::mat rcddm_ext(int n, arma::vec pVec, arma::vec angle, double p);
-RcppExport SEXP CircularDDM_rcddm_ext(SEXP nSEXP, SEXP pVecSEXP, SEXP angleSEXP, SEXP pSEXP) {
+// rcddm2_internal
+arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat sp, double t0, double p, int tol);
+RcppExport SEXP CircularDDM_rcddm2_internal(SEXP nSEXP, SEXP thresholdSEXP, SEXP angleSEXP, SEXP spSEXP, SEXP t0SEXP, SEXP pSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type angle(angleSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type sp(spSEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
     Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcddm_ext(n, pVec, angle, p));
+    Rcpp::traits::input_parameter< int >::type tol(tolSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcddm2_internal(n, threshold, angle, sp, t0, p, tol));
     return rcpp_result_gen;
 END_RCPP
 }

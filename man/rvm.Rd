@@ -11,7 +11,7 @@ rvm(n, mu, k)
 
 \item{mu}{mean direction of the distribution.}
 
-\item{k}{kappa paramter. A non-negative numeric value for the concentration
+\item{k}{kappa parameter. A positive numeric value for the concentration
 parameter of the distribution.}
 }
 \value{
@@ -19,12 +19,12 @@ a column vector
 }
 \description{
 This function generates random deviates from a von Mises distribution with
-parameters, mu and k.
+parameters, mu and k (ie kappa).
 }
 \details{
 A random deviate for a circular normal distribution has the form:\cr
-\deqn{f(theta; mu, kappa) = 1 / (2 * pi * I0(kappa)) * exp(kappa * cos(theta-mu))}
-theta is within 0 and 2 * pi.
+\deqn{f(theta; mu, kappa) = 1 / (2*pi*I0(kappa)) * exp(kappa*cos(theta-mu))}
+theta is within 0 and 2*pi.
 
 \code{I0(kappa)} in the normalizing constant is the modified Bessel
 function of the first kind and order zero.
@@ -33,6 +33,6 @@ function of the first kind and order zero.
 n  <- 100
 mu <- 0
 k  <- 10
-vm_de <- rvm(n, mu, k)       ## in degree unit
-vm_pi <- vm3_de \%\% (2 * pi)  ## in radian unit
+vm_de <- rvm(n, mu, k)      ## in degree unit
+vm_pi <- vm_de \%\% (2 * pi)  ## in radian unit
 }

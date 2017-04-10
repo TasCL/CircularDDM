@@ -2,49 +2,30 @@
 % Please edit documentation in R/RcppExports.R
 \name{dcddm}
 \alias{dcddm}
-\alias{rcddm}
-\alias{rcddm_ext}
 \title{The Circular Drift-diffusion Distribution}
 \usage{
 dcddm(x, pVec, k = 141L)
-
-rcddm(n, pVec, p = 0.15)
-
-rcddm_ext(n, pVec, angle, p = 0.15)
 }
 \arguments{
-\item{x}{a matrix storing a first column as RT and a second column of
+\item{x}{a matrix storing a first column of RT and a second column of
 continuous responses/reports/outcomes. Each row is a trial.}
 
-\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s],
+\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s].
 a stands for response threshold, vx is the drift rate along x axis,
 vy is the drift rate along y axis, t0 is the non-decision time, and s
-is the within-trial variance. The order matters. \code{pVec} for
-\code{rcddm} is [a, vx, vy, t0, s, xPos, yPos]}
+is the within-trial variance. The order matters.}
 
 \item{k}{a precision for calculating the infinite series in \code{dcddm}.
 The larger the k is, the larger the memory space is required. Default is
 141.}
-
-\item{n}{number of observations.}
-
-\item{p}{a precision for random walk step in \code{rcddm}. Default is 0.15
-second}
-
-\item{angle}{an angle vector, allowing one to supply a vector of random
-draws from an arbitary, instead of von Mise, distribution.}
 }
 \value{
-\code{dcddm} gives a likelihood vector. \code{rcddm} generates
-random deviates, returning a n x 2 matrix with the columns: RTs, and angles.
+\code{dcddm} gives a likelihood column vector.
 }
 \description{
-Density function and random generation for the circular drift-diffusion
-model with theta vector equal to \code{pVec}.  \code{dcddm} is the
-equation (23) on page 433 in Smith (2016). \code{rcddm} is a canonical
-form of random number generator for circular drift-diffusion model.
-\code{rcddm_ext} is an extension, allowing one to set start point
-position by entering a \code{pVec} of [a, vx, vy, t0, s, xPos, yPos].
+Density function for the circular drift-diffusion model with theta
+vector equal to \code{pVec}.  \code{dcddm} is the
+equation (23) on page 433 in Smith (2016).
 }
 \examples{
 ## dcddm example
@@ -54,19 +35,6 @@ R = c(1.9217430, 1.7844653, 0.2662521, 2.1569724, 1.7277440, 0.8607271)
 )
 pVec <- c(a=2.45, vx=1.5, vy=1.25, t0=.1, s=1)
 dcddm(x, pVec)
-
-## rcddm example
-pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
-den  <- rcddm(1e3, pVec);
-hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
-hist(den[,2], breaks = "fd", xlab="Response Angle", main="Density")
-
-## rcddm_ext example
-pVec   <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1, xPos=0.1, yPos=0.1)
-angles <- rvm(1e3, 0, 10)
-den    <- rcddm_ext(1e3, pVec, angles)
-hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
-hist(den[,2], breaks = "fd", xlab="Response Angle", main="Density")
 }
 \references{
 Smith, P. L. (2016). Diffusion Theory of Decision Making in

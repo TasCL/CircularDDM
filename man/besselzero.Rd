@@ -9,31 +9,27 @@ besselzero(nu, k, kind)
 \arguments{
 \item{nu}{The order of the corresponding Bessel function.}
 
-\item{k}{an integer for first k positive zeros.}
+\item{k}{an integer for the first k positive zeros.}
 
 \item{kind}{0, 1, or 2. A switch selects \link{besselI}, \link{besselJ} or
 \link{besselY}}
 }
 \value{
-a vector
+a column vector
 }
 \description{
-Find first k positive zeros of the Bessel function J(n, x) or Y(n, x)
-using Halley's method.
+This function finds the first k positive zeros of the Bessel function
+J(n, x) or Y(n, x) using Halley's method.
 }
 \examples{
 nu <- seq(0, 5, length.out=10)
 output <- matrix(numeric(5*length(nu)), nrow=5)
-  for(i in 1:length(nu)) {
-    output[,i] <- besselzero(nu[i], 5, 1)
-  }
-output
+for (i in 1:length(nu)) { output[,i] <- besselzero(nu[i], 5, 1) }
+print(output)
 
 output <- matrix(numeric(5*length(nu)), nrow=5)
-for(i in 1:length(nu)) {
-    output[,i] <- besselzero(nu[i], 5, 2)
-}
-output
+for(i in 1:length(nu)) { output[,i] <- besselzero(nu[i], 5, 2) }
+print(output)
 }
 \references{
 \href{http://au.mathworks.com/matlabcentral/fileexchange/6794-bessel-function-zeros/content/besselzero.m}{besselzero.m}
