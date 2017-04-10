@@ -1,4 +1,4 @@
-# Circular Drift-diffusion Model 
+# Circular Drift-Diffusion Model 
 
 CircularDDM implements circular drift-diffusion/decision-diffusion model, using 
 Armadillo C++.  
