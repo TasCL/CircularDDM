@@ -30,9 +30,23 @@ dcddm(x, pVec)
 ## rcddm example ##
 ###################
 pVec <- c(a=2, vx=1.5, vy=1.25, t0=.25, s=1)
-den  <- rcddm(1e3, pVec);
+den  <- rcddm1(1e3, pVec);
 hist(den[,1], breaks = "fd", xlab="Response Time",  main="Density")
 hist(den[,2], breaks = "fd", xlab="Response Angle", main="Density")
+
+t0    <- .25
+thre  <- runif(10, 0, 2)
+angle <- rvm(1e3, 0, 10)
+sp    <- cbind(runif(10, 0, 1), runif(10, 0,1))
+dat   <- rcddm2(1e3, thre, angle, sp, t0)
+
+
+## Fix starting point at a constant
+t0    <- .25
+thre  <- runif(1, 0, 2); threshold
+angle <- rvm(1e3, 0, 10)
+sp    <- cbind(runif(1, 0, 1),  runif(1, 0, 1)) 
+dat   <- rcddm2(1e3, threshold, angle, startpoint, t0)
 
 ```
 
@@ -43,7 +57,7 @@ hist(den[,2], breaks = "fd", xlab="Response Angle", main="Density")
 ## From github
 devtools::install_github("TasCL/CircularDDM")
 ## From source: 
-install.packages("CircularDDM_0.1.1.tar.gz", repos = NULL, type="source")
+install.packages("CircularDDM_0.1.3.tar.gz", repos = NULL, type="source")
 ```
 
 R package requires:
