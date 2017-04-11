@@ -19,13 +19,13 @@
 
 using namespace arma;
 
-arma::vec getVec(double *x, size_t nx) {
+inline arma::vec getVec(double *x, size_t nx) {
   arma::vec out(nx);
   for(int i=0; i<nx; i++) { out[i]=*(x+i); }
   return out;
 }
 
-arma::mat getMat(double *x, size_t nrow, size_t ncol) {
+inline arma::mat getMat(double *x, size_t nrow, size_t ncol) {
   int nx = nrow * ncol, i=0, j=0, k=0;
   arma::mat out(nrow, ncol);
 
@@ -47,10 +47,6 @@ arma::vec besselJ(arma::vec x, double nu) {
     {
         int idx  = std::distance(x.begin(), i);
         out[idx] = gsl_sf_bessel_Jn(nu, *i); // R's besselJ
-        /* if(std::isnan(out[idx])) {
-          std::cout << "In besselJ: " << out[idx] << "\t nu is " << nu <<
-            "i is " << *i << std::endl;
-        } */
     }
 
     return out;
@@ -81,8 +77,8 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
       a = 0;
       b = 0;
     }
-    err  = (2*a*x0*(n*a - b*x0) ) /
-      ( 2*b*b*x0*x0 - a*b*x0*(4*n1) + (n*n1+x0*x0)*a*a );
+    err  = (2.0*a*x0*(n*a - b*x0) ) /
+      ( 2.0*b*b*x0*x0 - a*b*x0*(4.0*n1) + (n*n1+x0*x0)*a*a );
     x    = x0 - err;
     x0   = x;
     iter = iter + 1;
@@ -100,7 +96,7 @@ arma::vec besselzero(double nu, int k, int kind) {
     double x0;
     arma::vec x = arma::zeros<arma::vec>(3*k);
     for (int j=1; j<=3*k; j++) {         // Initial guess of zeros
-        x0     = 1 + std::sqrt(2) + (j-1) * M_PI + nu + std::pow(nu, 0.4);
+        x0     = 1 + std::sqrt(2.0) + (j-1)*M_PI + nu + std::pow(nu, 0.4);
         x(j-1) = findzero(nu, x0, kind);     // Halley's method
         if (x(j-1) == INFINITY) {std::cout << "Bad guess.";}
     }
@@ -125,7 +121,7 @@ arma::vec logLik_resp(arma::mat x, arma::vec pVec) {
   term0 = pVec[0] / pVec[4];
   term1 = trans(pMat.row(1)) % arma::cos(choices);
   term2 = trans(pMat.row(2)) % arma::sin(choices);
-  term3 = (0.5 * pVec[4]) * ( std::pow(pVec[1], 2) + std::pow(pVec[2], 2) );
+  term3 = (0.5 * pVec[4]) * (pVec[1]*pVec[1]  + pVec[2]*pVec[2]);
 
   term0_vec = arma::repmat(term0, n, 1);
   term3_vec = arma::repmat(term3, n, 1);
@@ -151,10 +147,10 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
   {
     idx        = std::distance(rts.begin(), i);
     dt         = *i - pVec[3];
-    tmp        = -0.5 * pVec[4] * dt / std::pow(pVec[0] , 2);
+    tmp        = -0.5 * pVec[4] * dt / pVec[0] * pVec[0];
     scalar     = tmp;
     scalar_vec = arma::repmat(scalar, k, 1);
-    out[idx]   = pVec[4] / std::pow(pVec[0], 2) *
+    out[idx]   = pVec[4] / pVec[0] * pVec[0] *
       arma::accu(j0k / J1 % arma::exp(scalar_vec % j0k2));
     // When RT and t0 is almost identical, we deem it unlikely.
     if ((*i - pVec[3]) < 0.01) {out[idx] = 1e-10;} //
@@ -167,9 +163,9 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 arma::vec rvm(int n, double mu, double k) {
   double U, U1, U2, a, b, r, z, f, c;
 
-  a = 1 + std::sqrt(1+4 * k * k);
-  b = (a - std::sqrt(2*a))/(2* k);
-  r = (1 + b*b)/(2*b);
+  a = 1. + std::sqrt(1. + 4. * k*k);
+  b = (a - std::sqrt(2. * a))/(2. * k);
+  r = (1. + b*b)/(2.*b);
 
   arma::vec out(n);
   arma::vec::iterator i = out.begin() ;
@@ -179,16 +175,16 @@ arma::vec rvm(int n, double mu, double k) {
     c  = k * (r - f);
 
     U = arma::as_scalar(arma::randu<arma::vec>(1));
-    if(c * (2 - c) > U) {
+    if(c * (2. - c) > U) {
       U1 = arma::as_scalar(arma::randu<arma::vec>(1));
       *i = (U1 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-      if(k == 0) {*i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
+      if(k == 0) {*i = 2.*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
       i++;
     } else {
       if(std::log(c/U) + 1 >= c) {
         U2 = arma::as_scalar(arma::randu<arma::vec>(1));
         *i = (U2 > .50) ? std::acos(f) + mu : -std::acos(f) + mu;
-        if(k == 0) {*i = 2*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
+        if(k == 0) {*i = 2.*M_PI * arma::as_scalar(arma::randu<arma::vec>(1));}
         i++;
       }
     }
@@ -197,87 +193,87 @@ arma::vec rvm(int n, double mu, double k) {
   return out;
 }
 
-void rcddm(int n, double *pvec, size_t npvec, double p, double y1[],
-  double y2[], double y3[])
-  {
-  arma::vec pVec = getVec(pvec, npvec);
+void rcddm2(int n, double *a, double *ang, double *SP, double* t0,
+            size_t na, size_t nang, size_t nrow, size_t ncol, double* p,
+            int tol, double RT[], double R[]) {
+  // Convert to Armadillo vectors and matrices to easily work with
+  arma::vec thres = getVec(a, na);
+  arma::vec angle = getVec(ang, nang);
+  arma::mat sp_m  = getMat(SP, nrow, ncol);
 
-  int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
-  double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
-  arma::vec RT(n), R(n), A(n); // R for responses, A for angle
-
-  // page 435 in Smith (2016) equation (29)
-  double mu = std::atan2(pVec[2], pVec[1]);
-  double k  = std::sqrt(pVec[2]*pVec[2]+pVec[1]*pVec[1]) / pVec[4];
+  int step, idx_a, idx_ang, idx_sp;
+  double rPos, xPos, yPos, thPos, theta; // thPos==theta position
 
   for (int i = 0; i < n; i++) {
-    step = 0; rPos = 0; xPos = 0; yPos = 0;
+    step = 0;
+    idx_sp = (nrow==1) ? 0 : (std::ceil((double)nrow * arma::as_scalar(arma::randu(1))) - 1);
+    idx_a  = (na ==1)  ? 0 : (std::ceil((double)na * arma::as_scalar(arma::randu(1))) - 1);
+    arma::rowvec spPos = sp_m.row(idx_sp);
+    xPos = spPos[0]; // sp_x;
+    yPos = spPos[1]; // sp_y;
+    rPos = std::sqrt(xPos*xPos + yPos*yPos);
+
     do {
-      theta = arma::as_scalar(rvm(1, mu, k));
-      xPos  = xPos + std::cos(theta);
-      yPos  = yPos + std::sin(theta);
-      rPos  = std::sqrt(std::pow(xPos, 2) + std::pow(yPos, 2));
+      idx_ang = (nang==1) ? 0 : (std::ceil((double)nang * arma::as_scalar(arma::randu(1))) - 1);
+      theta   = angle[idx_ang];
+      xPos += std::cos(theta);
+      yPos += std::sin(theta);
+      rPos  = std::sqrt(xPos*xPos + yPos*yPos);
       thPos = std::atan2(yPos, xPos);
       step++;
-    } while (std::abs(rPos) < pVec[0]);
 
-    // dt = 0; // rexp take scale==mean==mu
-    // for(int j=0; j<step; j++) { dt = dt + R::rexp(p); }
-    // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
-    RT[i] = pVec[3] + arma::as_scalar(arma::randg(1, distr_param((double)step, p)));
-    R[i]  = thPos;
-    A[i]  = fmod(thPos + 2.0*M_PI, 2.0*M_PI);
-    // R[i]  = thPos/2;
-    //A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
+      if(step > tol) {
+          std::cout << "Trial " << i << " has taken more than " << tol <<
+              " steps, but yet reached the threshold.\n";
+          std::cout << "Please check the threshold vector.\n";
+          break;
+      }
+    } while (std::abs(rPos) < thres[idx_a]);
 
+    RT[i] = *t0 + arma::as_scalar(arma::randg(1, distr_param((double)step, *p))); // RT
+    R[i] = fmod(thPos + 2.0*M_PI, 2.0*M_PI); // R
   }
-
-  arma::mat tmp = arma::join_horiz(RT, R);
-  arma::mat out = arma::join_horiz(tmp, A);
-
-  for(int j=0; j<n; j++)
-  {
-    y1[j] = RT[j];
-    y2[j] = R[j];
-    y3[j] = A[j];
-  }
-
 }
-
-// arma::mat rddm(int n, arma::vec pVec, double p=.15)
 
 void mexFunction(int nlhs, mxArray *plhs[], /*output*/
                  int nrhs, const mxArray *prhs[]) /* Input variables */
 {
-  double *n, *pvec, *p, *y1, *y2, *y3;
-  size_t npvec;
+    // threshold, angle, starting point (mat), non-decision time, precision
+    // upper bound for drift-diffusion step
+    double *n_p, *a_p, *ang_p, *SP_p, *t0_p, *p_p, *tol_p, *RT_p, *R_p;
+    size_t na, nang, nrow, ncol;
 
-  if (nrhs != 3) {
-       mexErrMsgIdAndTxt("MATLAB:rddm:rhs",
-                      "This function requires 3 input arguments.");
+  if (nrhs != 7) {mexErrMsgIdAndTxt("MATLAB:rcddm2:rhs",
+             "This function requires 7 input arguments.");
   }
 
-  n     = mxGetPr(prhs[0]); /* pointer to first input matrix  */
-  pvec  = mxGetPr(prhs[1]); /* pointer to second input matrix */
-  p     = mxGetPr(prhs[2]); /* precision */
-  npvec = mxGetN(prhs[1]);  /* number of parameter */
-  int n_in = (int)(*n);
+  n_p = mxGetPr(prhs[0]); // pointer to the first element
+  a_p = mxGetPr(prhs[1]);
+  ang_p = mxGetPr(prhs[2]);
+  SP_p  = mxGetPr(prhs[3]);
+  t0_p  = mxGetPr(prhs[4]);
+  p_p   = mxGetPr(prhs[5]); /* precision */
+  tol_p = mxGetPr(prhs[6]);
+  int n   = (int)(*n_p);
+  int tol = (int)(*tol_p);
+
+  na   = mxGetN(prhs[1]);
+  nang = mxGetN(prhs[2]);
+  nrow = mxGetM(prhs[3]);  /* dimensions of starting point matrices   */
+  ncol = mxGetN(prhs[3]);
 
   /* Validate input arguments */
-  if (npvec != 5) {
-    mexErrMsgIdAndTxt("MATLAB:rddm:invalidInputType",
-      "pVec must be a 5-parameter vector.");
+  if (ncol != 2) {
+      mexErrMsgIdAndTxt("MATLAB:rcddm2:invalidInputType",
+                        "Starting point matrix must have 2 columns, [xPos yPos].");
   }
 
-  /* Create an n x 3 mxArray */
-  plhs[0] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  plhs[1] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  plhs[2] = mxCreateNumericMatrix(n_in, 1, mxDOUBLE_CLASS, mxREAL);
-  y1 = mxGetPr(plhs[0]);
-  y2 = mxGetPr(plhs[1]);
-  y3 = mxGetPr(plhs[2]);
-  rcddm(n_in, pvec, npvec, *p, y1, y2, y3);  // call rcddm
-
+  /* Create an output n x 2 array */
+  plhs[0] = mxCreateNumericMatrix(n, 1, mxDOUBLE_CLASS, mxREAL);
+  plhs[1] = mxCreateNumericMatrix(n, 1, mxDOUBLE_CLASS, mxREAL);
+  RT_p    = mxGetPr(plhs[0]);
+  R_p     = mxGetPr(plhs[1]);
+  rcddm2(n, a_p, ang_p, SP_p, t0_p, na, nang, nrow, ncol, p_p, tol, RT_p, R_p);
 }
 
 

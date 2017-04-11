@@ -1,8 +1,8 @@
 function out = rvonmises(n, mu, kappa)
-%RVONMISES  Random generation for the von Mises circular
+%RVONMISES  Random number generator for the von Mises circular
 %distribution.
-%   out = rvonmises(n, mu, kappa) calls rddm.mexa64 to generates
-%   random deviates for von Mises distribution.
+%   out = rvonmises(n, mu, kappa) calls rvm.mexa64 to generates
+%   random deviates for a von Mises distribution.
 %
 %   Input:
 %     n     - number of observations 
@@ -10,7 +10,7 @@ function out = rvonmises(n, mu, kappa)
 %     kappa - width
 %
 %   Output:
-%     out   - random deviates from von Mises distribution
+%     out   - random deviates from a von Mises distribution
 %
 %   Examples: 
 %     n       = 20; 

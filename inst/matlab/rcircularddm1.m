@@ -1,8 +1,8 @@
-function [RT R A] = rcircularddm(n, pVec, p)
-%RCIRCULARDDM  Generate random deviates for the circular
+function [RT R] = rcircularddm1(n, pVec, p)
+%RCIRCULARDDM1  Generate random deviates for the circular
 %drift-diffusion model
 %
-%   [RT R A] = rcircularddm(n, pVec, stepTime) calls rddm.mexa64 to
+%   [RT R] = rcircularddm(n, pVec, p) calls rcddm1.mexa64 to
 %   generate random deviates for circular drift-diffusion
 %   distribution.
 %
@@ -17,26 +17,25 @@ function [RT R A] = rcircularddm(n, pVec, p)
 %
 %   Output:
 %     RT   - random deviates for response times, 
-%     R    - continuous reports
-%     A    - response angles.
+%     R    - response angles.
 %
 %   Examples:
 %     % threshold=2; vx=1.5; vy=1.25; t0=0.25; sigma_square = 1;
 %     pVec     = [2, 1.5, 1.25, .25, 1]; 
 %     stepTime = .001;  % use 1 ms step time, instead of 0.15 s
-%     [RT R A] = rcircularddm(1e3, pVec, stepTime);
+%     [RT R] = rcircularddm1(1e3, pVec, stepTime);
 %     
-%     [RT(1:10,:) R(1:10,:) A(1:10,:) ]  % Show the first 10 rows
+%     [RT(1:10,:) R(1:10,:)]  % Show the first 10 rows
 % 
-%     figure(3)
+%     figure(1)
 %     histogram(RT)
 %     xlabel('Response time')
 %     
-%     figure(4)
-%     histogram(A)
-%     xlabel('Response angle')
+%     figure(2)
+%     histogram(R)
+%     xlabel('Responses') 
 %     
-%     help('rcircularddm') % Show this help page
+%     help('rcircularddm1') % Show this help page
 %
 %   References:
 %     Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -49,4 +48,4 @@ if nargin < 3
      p = 0.15;
 end
 
-[RT R A] = rcddm(n, pVec, p);
+[RT R] = rcddm1(n, pVec, p);
