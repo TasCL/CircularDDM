@@ -11,7 +11,7 @@ Windows (mexw64 files) and OS X (mexmaci64 files).
 
 ## Getting Started
 
-The following examples are extracted from CircularDDM help pages
+The following examples are from CircularDDM help pages
 
 ```
 require(CircularDDM)
@@ -57,7 +57,7 @@ dat   <- rcddm2(1e3, threshold, angle, startpoint, t0)
 ## From github
 devtools::install_github("TasCL/CircularDDM")
 ## From source: 
-install.packages("CircularDDM_0.1.3.tar.gz", repos = NULL, type="source")
+install.packages("CircularDDM_0.1.4.tar.gz", repos = NULL, type="source")
 ```
 
 R package requires:
@@ -73,7 +73,7 @@ MATLAB toolbox folder. For example, in Linux default path, MATLAB toolbox is at
 '/usr/local/MATLAB/R2016a/toolbox' (version number may vary, e.g., 'R2015', etc.). 
 The following is a step-by-step instruction.
 
-1. Create a folder (e.g., by issuing 'mkdir') called 'CircularDDM' under
+1. Create a folder (e.g., 'mkdir') called 'CircularDDM' under
 '/usr/local/MATLAB/R2016a/toolbox'
 2. Copy all files in the 'inst/matlab' in the source tar ball to
 '/usr/local/MATLAB/R2016a/toolbox/CircularDDM'. Entering 'matlabroot' in MATLAB
@@ -100,6 +100,12 @@ MATLAB package requires:
 Kernel Library (MKL). I have not tested the third option. However Aramadillo's 
 author recommends it as a perhaps even faster option. 
 - See [Armadillo C++](http://arma.sourceforge.net/download.html) for details.
+
+## Contributors
+
+- Yi-Shin Lin <yishin.lin@utas.edu.au> 
+- Andrew Heathcote <andrew.heathcote@utas.edu.au> 
+- Peter Kvam <kvam.peter@gmail.com> 
 
 ## References
 * Smith, P. L. (2016). Diffusion Theory of Decision Making in Continuous Report.
