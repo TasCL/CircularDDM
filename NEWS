@@ -7,6 +7,8 @@
   'double k = p * std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];'.
   - change default step size (ie p) to 0.01 second (ie 10 ms) from 0.150 s
   (150 ms).
+  - remove tol argument. Define tolerance as 10 s, and derived upper step size
+  from p argument.
 
 0.1.3. Yi-Shin Lin <yishin.lin@utas.edu.au>
 
