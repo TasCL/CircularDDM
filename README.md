@@ -57,7 +57,7 @@ dat   <- rcddm2(1e3, threshold, angle, startpoint, t0)
 ## From github
 devtools::install_github("TasCL/CircularDDM")
 ## From source: 
-install.packages("CircularDDM_0.1.4.tar.gz", repos = NULL, type="source")
+install.packages("CircularDDM_0.1.5.tar.gz", repos = NULL, type="source")
 ```
 
 R package requires:
