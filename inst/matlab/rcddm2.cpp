@@ -222,11 +222,12 @@ void rcddm2(int n, double *a, double *ang, double *SP, double* t0,
       thPos = std::atan2(yPos, xPos);
       step++;
 
-      if(step > tol) {
-          std::cout << "Trial " << i << " has taken more than " << tol <<
-              " steps, but yet reached the threshold.\n";
-          std::cout << "Please check the threshold vector.\n";
-          break;
+      if(step > (10.0/(*p))) {
+        // If a trial has taken more than 10 seconds, but yet reached the
+        // threshold, we stop this trial.
+        std::cout << "Trial " << i << " has taken more than 10 seconds, " <<
+          "but yet reached the threshold. Please check the threshold\n";
+        break;
       }
     } while (std::abs(rPos) < thres[idx_a]);
 

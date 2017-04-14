@@ -84,8 +84,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcddm2_internal
-arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat sp, double t0, double p, int tol);
-RcppExport SEXP CircularDDM_rcddm2_internal(SEXP nSEXP, SEXP thresholdSEXP, SEXP angleSEXP, SEXP spSEXP, SEXP t0SEXP, SEXP pSEXP, SEXP tolSEXP) {
+arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat sp, double t0, double p);
+RcppExport SEXP CircularDDM_rcddm2_internal(SEXP nSEXP, SEXP thresholdSEXP, SEXP angleSEXP, SEXP spSEXP, SEXP t0SEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -95,8 +95,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::mat >::type sp(spSEXP);
     Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
     Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    Rcpp::traits::input_parameter< int >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcddm2_internal(n, threshold, angle, sp, t0, p, tol));
+    rcpp_result_gen = Rcpp::wrap(rcddm2_internal(n, threshold, angle, sp, t0, p));
     return rcpp_result_gen;
 END_RCPP
 }

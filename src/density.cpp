@@ -326,7 +326,7 @@ arma::vec dcddm(arma::mat x, arma::vec pVec, int k=141) {
 //' vy is the drift rate along y axis, t0 is the non-decision time, and sv_sq
 //' is the within-trial variance. The order matters.
 //' @param p a precision for random walk step in \code{rcddm}. Default is 0.01
-//' second
+//' second.
 //' @param angle an angle vector, allowing one to supply a vector of random
 //' draws from an arbitary, instead of von Mise, distribution.
 //' @param threshold a threshold vector.
@@ -334,9 +334,6 @@ arma::vec dcddm(arma::mat x, arma::vec pVec, int k=141) {
 //' of the starting point and the second column must be the y coordinate of
 //' the starting point. Each row is a random deviate.
 //' @param t0 non-decision time. Must be a scalar.
-//' @param tol an upper bound (step) for the drift-diffusion process. This
-//' prevents an unrealistic threshold been enterd from falling into while loop
-//' trap. Default is 1,000 steps.
 //'
 //' @return a n x 2 matrix with two columns: RTs and angles.
 //' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -392,6 +389,13 @@ arma::mat rcddm1(int n, arma::vec pVec, double p=0.01) {
       rPos  = std::sqrt(xPos*xPos + yPos*yPos); // should be drift magnitude
       thPos = std::atan2(yPos, xPos);
       step++;
+      if(step > (10.0/p)) {
+        // If a trial has taken more than 10 seconds, but yet reached the
+        // threshold, we stop this trial.
+        Rcpp::Rcout << "Trial " << i << " has taken more than 10 seconds, " <<
+          "but yet reached the threshold. Please check the threshold\n";
+        break;
+      }
     } while (std::abs(rPos) < pVec[0]);
 
     // dt = 0; // rexp take scale==mean==mu
@@ -399,8 +403,6 @@ arma::mat rcddm1(int n, arma::vec pVec, double p=0.01) {
     // rts[i] = pVec[3] + dt; // gamma a=shape b=scale=1/rate
     RT[i] = pVec[3] + R::rgamma(step, p); // gamma a=shape b=scale=1/rate
     A[i]  = fmod(thPos + 2.0*M_PI, 2*M_PI);
-    // A[i]  = ((0.5 - R[i]) > 0.5*M_PI) ? M_PI - (0.5 - R[i]) : 0.5 - R[i];
-    // R[i]  = thPos/2;
   }
   return arma::join_horiz(RT, A);
 }
@@ -409,7 +411,7 @@ arma::mat rcddm1(int n, arma::vec pVec, double p=0.01) {
 //' @export
 // [[Rcpp::export]]
 arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle,
-  arma::mat sp, double t0, double p=0.01, int tol=1e3) {
+  arma::mat sp, double t0, double p=0.01) {
     int step, idx_a, idx_ang, idx_sp, nang, na, nsp;
     double rPos, xPos, yPos, thPos, theta;
     arma::vec RT(n), A(n);
@@ -435,12 +437,11 @@ arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle,
         rPos  = std::sqrt(xPos*xPos + yPos*yPos);
         thPos = std::atan2(yPos, xPos);
         step++;
-        if(step > tol) {
-          // When p==1e-2 and tol=1e3, the tolerance for a trial is 10 seconds.
-          // an upper bound for a decison time
-          Rcpp::Rcout << "Trial " << i << " has taken more than " << tol <<
-            " steps, but yet reached the threshold.\n";
-          Rcpp::Rcout << "Please check your threshold vector.\n";
+        if(step > (10.0/p)) {
+          // If a trial has taken more than 10 seconds, but yet reached the
+          // threshold, we stop this trial.
+          Rcpp::Rcout << "Trial " << i << " has taken more than 10 seconds, " <<
+            "but yet reached the threshold. Please check the threshold\n";
           break;
         }
       } while (std::abs(rPos) < threshold[idx_a]);

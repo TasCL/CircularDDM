@@ -21,7 +21,7 @@ NULL
 
 #' @rdname rcddm1
 #' @export
-rcddm2 <- function(n, threshold, angle, sp, t0, p=0.15, tol=1e3L) {
+rcddm2 <- function(n, threshold, angle, sp, t0, p=0.01, tol=1e3L) {
     ## if the user supplies a R' vector, make it a row vector
     if (is.null(dim(sp))) { sp <- t(as.matrix(sp)) }
     if (length(t0) != 1)  { stop("t0 must be a scalar")}

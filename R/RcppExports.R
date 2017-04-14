@@ -164,8 +164,8 @@ dcddm <- function(x, pVec, k = 141L) {
 #' a stands for response threshold, vx is the drift rate along x axis,
 #' vy is the drift rate along y axis, t0 is the non-decision time, and sv_sq
 #' is the within-trial variance. The order matters.
-#' @param p a precision for random walk step in \code{rcddm}. Default is 0.15
-#' second
+#' @param p a precision for random walk step in \code{rcddm}. Default is 0.01
+#' second.
 #' @param angle an angle vector, allowing one to supply a vector of random
 #' draws from an arbitary, instead of von Mise, distribution.
 #' @param threshold a threshold vector.
@@ -173,9 +173,6 @@ dcddm <- function(x, pVec, k = 141L) {
 #' of the starting point and the second column must be the y coordinate of
 #' the starting point. Each row is a random deviate.
 #' @param t0 non-decision time. Must be a scalar.
-#' @param tol an upper bound (step) for the drift-diffusion process. This
-#' prevents an unrealistic threshold been enterd from falling into while loop
-#' trap. Default is 1,000 steps.
 #'
 #' @return a n x 2 matrix with two columns: RTs and angles.
 #' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -208,13 +205,13 @@ dcddm <- function(x, pVec, k = 141L) {
 #' den  <- rcddm2(1e3, threshold, angle, startpoint, t0)
 #'
 #' @export
-rcddm1 <- function(n, pVec, p = 0.15) {
+rcddm1 <- function(n, pVec, p = 0.01) {
     .Call('CircularDDM_rcddm1', PACKAGE = 'CircularDDM', n, pVec, p)
 }
 
 #' @rdname rcddm1
 #' @export
-rcddm2_internal <- function(n, threshold, angle, sp, t0, p = 0.15, tol = 1e3L) {
-    .Call('CircularDDM_rcddm2_internal', PACKAGE = 'CircularDDM', n, threshold, angle, sp, t0, p, tol)
+rcddm2_internal <- function(n, threshold, angle, sp, t0, p = 0.01) {
+    .Call('CircularDDM_rcddm2_internal', PACKAGE = 'CircularDDM', n, threshold, angle, sp, t0, p)
 }
 

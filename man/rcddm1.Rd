@@ -6,11 +6,11 @@
 \alias{rcddm2_internal}
 \title{The Circular Drift-diffusion Distribution}
 \usage{
-rcddm2(n, threshold, angle, sp, t0, p = 0.15, tol = 1000L)
+rcddm2(n, threshold, angle, sp, t0, p = 0.01, tol = 1000L)
 
-rcddm1(n, pVec, p = 0.15)
+rcddm1(n, pVec, p = 0.01)
 
-rcddm2_internal(n, threshold, angle, sp, t0, p = 0.15, tol = 1000L)
+rcddm2_internal(n, threshold, angle, sp, t0, p = 0.01)
 }
 \arguments{
 \item{n}{number of observations.}
@@ -26,12 +26,8 @@ the starting point. Each row is a random deviate.}
 
 \item{t0}{non-decision time. Must be a scalar.}
 
-\item{p}{a precision for random walk step in \code{rcddm}. Default is 0.15
-second}
-
-\item{tol}{an upper bound (step) for the drift-diffusion process. This
-prevents an unrealistic threshold been enterd from falling into while loop
-trap. Default is 1,000 steps.}
+\item{p}{a precision for random walk step in \code{rcddm}. Default is 0.01
+second.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, sv_sq].
 a stands for response threshold, vx is the drift rate along x axis,

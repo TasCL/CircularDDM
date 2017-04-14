@@ -217,6 +217,13 @@ void rcddm1(int n, double *pvec, size_t npvec, double* p, double RT[],
       rPos  = std::sqrt(xPos*xPos + yPos*yPos);
       thPos = std::atan2(yPos, xPos);
       step++;
+      if(step > (10.0/(*p))) {
+        // If a trial has taken more than 10 seconds, but yet reached the
+        // threshold, we stop this trial.
+        std::cout << "Trial " << i << " has taken more than 10 seconds, " <<
+          "but yet reached the threshold. Please check the threshold\n";
+        break;
+      }
     } while (std::abs(rPos) < pVec[0]);
 
     RT[i] = pVec[3] + arma::as_scalar(arma::randg(1, distr_param((double)step, *p)));
