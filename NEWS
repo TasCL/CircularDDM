@@ -2,7 +2,7 @@
 
   - Change unit circle to scaled circle. That is, in rcddm1.cpp, the kappa (k)
   parameter in von Mise distribution is scaled by a step size (ie p in the
-  function argument); hecnce changing code from
+  function argument); hence changing code from
   'double k = std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];' to
   'double k = p * std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];'.
   - change default step size (ie p) to 0.01 second (ie 10 ms) from 0.150 s
