@@ -6,7 +6,7 @@
 \alias{rcddm2_internal}
 \title{The Circular Drift-diffusion Distribution}
 \usage{
-rcddm2(n, threshold, angle, sp, t0, p = 0.01, tol = 1000L)
+rcddm2(n, threshold, angle, sp, t0, p = 0.01)
 
 rcddm1(n, pVec, p = 0.01)
 

@@ -21,11 +21,11 @@ NULL
 
 #' @rdname rcddm1
 #' @export
-rcddm2 <- function(n, threshold, angle, sp, t0, p=0.01, tol=1e3L) {
+rcddm2 <- function(n, threshold, angle, sp, t0, p=0.01) {
     ## if the user supplies a R' vector, make it a row vector
     if (is.null(dim(sp))) { sp <- t(as.matrix(sp)) }
     if (length(t0) != 1)  { stop("t0 must be a scalar")}
     .Call('CircularDDM_rcddm2_internal', PACKAGE = 'CircularDDM', n, threshold,
-          angle, sp, t0, p, tol)
+          angle, sp, t0, p)
 }
 
