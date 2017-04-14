@@ -124,7 +124,7 @@ inline double findzero(double n, double x0, int kind, double tol=1e-12,
   if (iter > (MAXIT - 1)) {
     Rcpp::Rcout << "Failed to converge within tolerance.\n" <<
       "Try a different initial guess";
-    x=INFINITY ;
+    x=INFINITY;
   }
   return x;
 }
@@ -174,17 +174,16 @@ arma::vec besselzero(double nu, int k, int kind) {
 //' Log-Likelihood for Continuous Reports
 //'
 //' Calculate log-likelihood of the continuous reports, using
-//' part part in equation (23) on p 433.
+//' equation (23) on p 433 in Smith (2016).
 //'
 //' This function does not do 'exp' in Smith (2016, p433), so it calculates
 //' log-likelihood, instead of just likelihood.
 //'
 //' @param x a matrix storing a first column of RT and a second column of
 //' continuous responses/reports. Each row is a trial.
-//' @param pVec a parameter vector with the order [a, vx, vy, t0, s], which are
-//' decision threshold, drift rate along x axis,  drift rate along y axis,
-//' non-decision time, and the variance (not standard deviation) of or within
-//' trial variability.
+//' @param pVec a parameter vector with the order [a, vx, vy, t0, sv_sq], which
+//' are decision threshold, drift rate along x axis,  drift rate along y axis,
+//' non-decision time, and within trial variance.
 //'
 //' @return a column vector
 //' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -227,7 +226,7 @@ arma::vec logLik_resp(arma::mat x, arma::vec pVec) {
 //' Calculate circular log-likelihood of the first passage time, using
 //' equation (22) on page 432. Note this function return log density so as to
 //' be compatiable with \code{logLik_resp}. Equation (22) in Smith (2016)
-//' describes density.
+//' describes the density function.
 //'
 //' @param x a matrix storing a first column of RT and a second column of
 //' continuous responses/reports. Each row is a trial.
@@ -285,7 +284,7 @@ arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k=141) {
 //' equation (23) on page 433 in Smith (2016).
 //'
 //' @param x a matrix storing a first column of RT and a second column of
-//' continuous responses/reports/outcomes. Each row is a trial.
+//' continuous responses/reports. Each row is a trial.
 //' @param pVec a parameter vector with the order [a, vx, vy, t0, s].
 //' a stands for response threshold, vx is the drift rate along x axis,
 //' vy is the drift rate along y axis, t0 is the non-decision time, and s
@@ -315,18 +314,18 @@ arma::vec dcddm(arma::mat x, arma::vec pVec, int k=141) {
 //' The Circular Drift-diffusion Distribution
 //'
 //' Generate random deviates for the circular drift-diffusion
-//' model with a theta vector, \code{pVec}. \code{rcddm1} is a canonical
+//' model with a theta vector, namely \code{pVec}. \code{rcddm1} is a canonical
 //' form of the random number generator for circular drift-diffusion model.
 //' \code{rcddm2} is an extension, allowing one to supply a threshold vector,
 //' an angle vector, a starting point matrix [xPos, yPos] and a non-decision
 //' time.
 //'
 //' @param n number of observations.
-//' @param pVec a parameter vector with the order [a, vx, vy, t0, s].
+//' @param pVec a parameter vector with the order [a, vx, vy, t0, sv_sq].
 //' a stands for response threshold, vx is the drift rate along x axis,
-//' vy is the drift rate along y axis, t0 is the non-decision time, and s
+//' vy is the drift rate along y axis, t0 is the non-decision time, and sv_sq
 //' is the within-trial variance. The order matters.
-//' @param p a precision for random walk step in \code{rcddm}. Default is 0.15
+//' @param p a precision for random walk step in \code{rcddm}. Default is 0.01
 //' second
 //' @param angle an angle vector, allowing one to supply a vector of random
 //' draws from an arbitary, instead of von Mise, distribution.
@@ -371,27 +370,26 @@ arma::vec dcddm(arma::mat x, arma::vec pVec, int k=141) {
 //'
 //' @export
 // [[Rcpp::export]]
-arma::mat rcddm1(int n, arma::vec pVec, double p=0.15) {
+arma::mat rcddm1(int n, arma::vec pVec, double p=0.01) {
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
   arma::vec RT(n), A(n); // R for responses, A for angle
 
   // page 435 in Smith (2016) equation (29)
-  double mu = std::atan2(pVec[2], pVec[1]);
-  double k  = std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];
+  double mu = std::atan2(pVec[2], pVec[1]); // drift direction
+  // drift magnitude == std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1])
+  // update step size from 1.0 to p
+  double k  = p * std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];
 
   for (int i = 0; i < n; i++) {
-    step = 0;
-    xPos = 0;
+    step = 0; // If the starting point is (0, 0), rPos=0. So I did not calculate
+    xPos = 0; // initial rPos here.
     yPos = 0;
-    rPos = std::sqrt(xPos*xPos + yPos*yPos);
-    do {
+    do { // should be drift direction
       theta = arma::as_scalar(rvm(1, mu, k)); // get 1 von miss random number
-      // xPos  = xPos + std::cos(theta);         // with parameter mu and kappa (ie k)
-      // yPos  = yPos + std::sin(theta);
-      xPos  += std::cos(theta);         // with parameter mu and kappa (ie k)
+      xPos  += std::cos(theta);               // with parameter mu and kappa
       yPos  += std::sin(theta);
-      rPos  = std::sqrt(xPos*xPos + yPos * yPos);
+      rPos  = std::sqrt(xPos*xPos + yPos*yPos); // should be drift magnitude
       thPos = std::atan2(yPos, xPos);
       step++;
     } while (std::abs(rPos) < pVec[0]);
@@ -410,8 +408,8 @@ arma::mat rcddm1(int n, arma::vec pVec, double p=0.15) {
 //' @rdname rcddm1
 //' @export
 // [[Rcpp::export]]
-arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat sp,
-  double t0, double p=0.15, int tol=1e3) {
+arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle,
+  arma::mat sp, double t0, double p=0.01, int tol=1e3) {
     int step, idx_a, idx_ang, idx_sp, nang, na, nsp;
     double rPos, xPos, yPos, thPos, theta;
     arma::vec RT(n), A(n);
@@ -420,8 +418,8 @@ arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat
     nsp  = sp.n_rows;
 
     // No mu and kappa for von mise, because the user should supply an angle vector
-    for (int i = 0; i < n; i++) {  // each i is a trial
-      step   = 0;              // '-1' corrects for R-C indexing
+    for (int i = 0; i < n; i++) { // each i is a trial
+      step   = 0;                 // '-1' corrects for R-C indexing
       idx_sp = (nsp==1) ? 0 : (std::ceil((double)nsp * R::runif(0.0, 1.0)) - 1);
       idx_a  = (na ==1) ? 0 : (std::ceil((double)na  * R::runif(0.0, 1.0)) - 1);
       arma::rowvec spPos = sp.row(idx_sp);
@@ -432,14 +430,14 @@ arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat
       do { // within trial accumulation process
         idx_ang = (nang==1) ? 0 : (std::ceil((double)nang * R::runif(0.0, 1.0)) - 1);
         theta   = angle[idx_ang];
-        // xPos    = xPos + std::cos(theta);
-        // yPos    = yPos + std::sin(theta);
         xPos += std::cos(theta);
         yPos += std::sin(theta);
         rPos  = std::sqrt(xPos*xPos + yPos*yPos);
         thPos = std::atan2(yPos, xPos);
         step++;
         if(step > tol) {
+          // When p==1e-2 and tol=1e3, the tolerance for a trial is 10 seconds.
+          // an upper bound for a decison time
           Rcpp::Rcout << "Trial " << i << " has taken more than " << tol <<
             " steps, but yet reached the threshold.\n";
           Rcpp::Rcout << "Please check your threshold vector.\n";
@@ -448,7 +446,7 @@ arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat
       } while (std::abs(rPos) < threshold[idx_a]);
 
       RT[i] = t0 + R::rgamma(step, p); // gamma a=shape b=scale=1/rate
-      A[i]  = fmod(thPos + 2.0*M_PI, 2*M_PI);
+      A[i]  = fmod(thPos + 2.0*M_PI, 2.0*M_PI);
     }
     return arma::join_horiz(RT, A);
 }
@@ -491,16 +489,6 @@ std::vector<int> genInt3 (int n) {
 
 */
 
-/* xPos and yPos vector from Monte Carlo from an user [xPos yPos]
-arma::mat rcddm_ext3(int n, arma::vec pVec, arma::vec angle, arma::vec rPos,
-                     double p=0.15) {
-  int step, idx, nangle = angle.n_elem;
-  double  xPos, yPos, thPos, theta, threshold;
-  arma::vec RT(n), A(n);
-  return arma::join_horiz(RT, A);
-}
-*/
-
 // #include <RcppArmadilloExtensions/sample.h>
 // arma::vec test_sample(int a) {
 //   arma::vec x   = arma::randn<arma::vec>(5);
@@ -511,33 +499,3 @@ arma::mat rcddm_ext3(int n, arma::vec pVec, arma::vec angle, arma::vec rPos,
 //   return out;
 // }
 
-/*
-arma::mat rcddm2(int n, arma::vec pVec, arma::vec angle, double p=0.15) {
-  // pVec [a, vx, vy, t0, s, xPos, yPos] == [thresh, mu1, mu2, ndt, sigmasq, sp_x, sp_y]
-  int step, idx, nangle = angle.n_elem;
-  double rPos, xPos, yPos, thPos, theta;
-  arma::vec RT(n), A(n);
-  // if (angle.n_elem < 1e3) {Rcpp::stop("A minimal 1,000 simulations required.");}
-  // No mu and k, because the user should supply an angle vector
-
-  for (int i = 0; i < n; i++) {
-    step = 0;
-    xPos = pVec[5];
-    yPos = pVec[6];
-    rPos = std::sqrt(xPos*xPos + yPos*yPos);
-    do {
-      idx   = std::ceil((double)nangle * R::runif(0.0, 1.0)) - 1;
-      theta = angle[idx];
-      xPos  = xPos + std::cos(theta);
-      yPos  = yPos + std::sin(theta);
-      rPos  = std::sqrt(xPos*xPos + yPos*yPos);
-      thPos = std::atan2(yPos, xPos);
-      step++;
-    } while (std::abs(rPos) < pVec[0]);
-
-    RT[i] = pVec[3] + R::rgamma(step, p); // gamma a=shape b=scale=1/rate
-    A[i]  = fmod(thPos + 2.0 * M_PI, 2 * M_PI);
-  }
-  return arma::join_horiz(RT, A);
-}
- */

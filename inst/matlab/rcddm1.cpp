@@ -198,17 +198,15 @@ arma::vec rvm(int n, double mu, double k) {
 }
 
 void rcddm1(int n, double *pvec, size_t npvec, double* p, double RT[],
-  double R[])
-  {
-  arma::vec pVec = getVec(pvec, npvec);
+  double R[]) {
 
+  arma::vec pVec = getVec(pvec, npvec);
   int step;   // pVec [a, vx, vy, t0, s] == [thresh, mu1, mu2, ndt, sigmasq]
   double rPos, xPos, yPos, thPos, theta; // thPos stands for theta position
-  // arma::vec RT(n), R(n), A(n); // R for responses, A for angle
 
   // page 435 in Smith (2016) equation (29)
   double mu = std::atan2(pVec[2], pVec[1]);
-  double k  = std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];
+  double k  = (*p) * std::sqrt(pVec[2]*pVec[2] + pVec[1]*pVec[1]) / pVec[4];
 
   for (int i = 0; i < n; i++) {
     step = 0; rPos = 0; xPos = 0; yPos = 0;
@@ -224,15 +222,6 @@ void rcddm1(int n, double *pvec, size_t npvec, double* p, double RT[],
     RT[i] = pVec[3] + arma::as_scalar(arma::randg(1, distr_param((double)step, *p)));
     R[i]  = fmod(thPos + 2.0*M_PI, 2.0*M_PI);
   }
-  /*
-
-  for(int j=0; j<n; j++)
-  {
-    y1[j] = RT[j];
-    y2[j] = R[j];
-  }
-  */
-
 }
 
 // arma::mat rddm(int n, arma::vec pVec, double p=.15)

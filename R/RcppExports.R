@@ -60,17 +60,16 @@ besselzero <- function(nu, k, kind) {
 #' Log-Likelihood for Continuous Reports
 #'
 #' Calculate log-likelihood of the continuous reports, using
-#' part part in equation (23) on p 433.
+#' equation (23) on p 433 in Smith (2016).
 #'
 #' This function does not do 'exp' in Smith (2016, p433), so it calculates
 #' log-likelihood, instead of just likelihood.
 #'
 #' @param x a matrix storing a first column of RT and a second column of
 #' continuous responses/reports. Each row is a trial.
-#' @param pVec a parameter vector with the order [a, vx, vy, t0, s], which are
-#' decision threshold, drift rate along x axis,  drift rate along y axis,
-#' non-decision time, and the variance (not standard deviation) of or within
-#' trial variability.
+#' @param pVec a parameter vector with the order [a, vx, vy, t0, sv_sq], which
+#' are decision threshold, drift rate along x axis,  drift rate along y axis,
+#' non-decision time, and within trial variance.
 #'
 #' @return a column vector
 #' @references Smith, P. L. (2016). Diffusion Theory of Decision Making in
@@ -93,7 +92,7 @@ logLik_resp <- function(x, pVec) {
 #' Calculate circular log-likelihood of the first passage time, using
 #' equation (22) on page 432. Note this function return log density so as to
 #' be compatiable with \code{logLik_resp}. Equation (22) in Smith (2016)
-#' describes density.
+#' describes the density function.
 #'
 #' @param x a matrix storing a first column of RT and a second column of
 #' continuous responses/reports. Each row is a trial.
@@ -127,7 +126,7 @@ logLik_dt <- function(x, pVec, k = 141L) {
 #' equation (23) on page 433 in Smith (2016).
 #'
 #' @param x a matrix storing a first column of RT and a second column of
-#' continuous responses/reports/outcomes. Each row is a trial.
+#' continuous responses/reports. Each row is a trial.
 #' @param pVec a parameter vector with the order [a, vx, vy, t0, s].
 #' a stands for response threshold, vx is the drift rate along x axis,
 #' vy is the drift rate along y axis, t0 is the non-decision time, and s
@@ -154,16 +153,16 @@ dcddm <- function(x, pVec, k = 141L) {
 #' The Circular Drift-diffusion Distribution
 #'
 #' Generate random deviates for the circular drift-diffusion
-#' model with a theta vector, \code{pVec}. \code{rcddm1} is a canonical
+#' model with a theta vector, namely \code{pVec}. \code{rcddm1} is a canonical
 #' form of the random number generator for circular drift-diffusion model.
 #' \code{rcddm2} is an extension, allowing one to supply a threshold vector,
 #' an angle vector, a starting point matrix [xPos, yPos] and a non-decision
 #' time.
 #'
 #' @param n number of observations.
-#' @param pVec a parameter vector with the order [a, vx, vy, t0, s].
+#' @param pVec a parameter vector with the order [a, vx, vy, t0, sv_sq].
 #' a stands for response threshold, vx is the drift rate along x axis,
-#' vy is the drift rate along y axis, t0 is the non-decision time, and s
+#' vy is the drift rate along y axis, t0 is the non-decision time, and sv_sq
 #' is the within-trial variance. The order matters.
 #' @param p a precision for random walk step in \code{rcddm}. Default is 0.15
 #' second

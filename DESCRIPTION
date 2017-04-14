@@ -1,6 +1,6 @@
 Package: CircularDDM
-Version: 0.1.4
-Date: 2017-04-13
+Version: 0.1.5
+Date: 2017-04-14
 Title: Circular Drift-Diffusion Model
 Authors@R: c(person("Yi-Shin", "Lin", role = c("aut", "cre"),
                      email = "yishin.lin@utas.edu.au"),

@@ -33,9 +33,9 @@ second}
 prevents an unrealistic threshold been enterd from falling into while loop
 trap. Default is 1,000 steps.}
 
-\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s].
+\item{pVec}{a parameter vector with the order [a, vx, vy, t0, sv_sq].
 a stands for response threshold, vx is the drift rate along x axis,
-vy is the drift rate along y axis, t0 is the non-decision time, and s
+vy is the drift rate along y axis, t0 is the non-decision time, and sv_sq
 is the within-trial variance. The order matters.}
 }
 \value{
@@ -43,7 +43,7 @@ a n x 2 matrix with two columns: RTs and angles.
 }
 \description{
 Generate random deviates for the circular drift-diffusion
-model with a theta vector, \code{pVec}. \code{rcddm1} is a canonical
+model with a theta vector, namely \code{pVec}. \code{rcddm1} is a canonical
 form of the random number generator for circular drift-diffusion model.
 \code{rcddm2} is an extension, allowing one to supply a threshold vector,
 an angle vector, a starting point matrix [xPos, yPos] and a non-decision

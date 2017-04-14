@@ -25,7 +25,7 @@ a column vector
 Calculate circular log-likelihood of the first passage time, using
 equation (22) on page 432. Note this function return log density so as to
 be compatiable with \code{logLik_resp}. Equation (22) in Smith (2016)
-describes density.
+describes the density function.
 }
 \examples{
 x <- cbind(

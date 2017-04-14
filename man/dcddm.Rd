@@ -8,7 +8,7 @@ dcddm(x, pVec, k = 141L)
 }
 \arguments{
 \item{x}{a matrix storing a first column of RT and a second column of
-continuous responses/reports/outcomes. Each row is a trial.}
+continuous responses/reports. Each row is a trial.}
 
 \item{pVec}{a parameter vector with the order [a, vx, vy, t0, s].
 a stands for response threshold, vx is the drift rate along x axis,

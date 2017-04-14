@@ -10,17 +10,16 @@ logLik_resp(x, pVec)
 \item{x}{a matrix storing a first column of RT and a second column of
 continuous responses/reports. Each row is a trial.}
 
-\item{pVec}{a parameter vector with the order [a, vx, vy, t0, s], which are
-decision threshold, drift rate along x axis,  drift rate along y axis,
-non-decision time, and the variance (not standard deviation) of or within
-trial variability.}
+\item{pVec}{a parameter vector with the order [a, vx, vy, t0, sv_sq], which
+are decision threshold, drift rate along x axis,  drift rate along y axis,
+non-decision time, and within trial variance.}
 }
 \value{
 a column vector
 }
 \description{
 Calculate log-likelihood of the continuous reports, using
-part part in equation (23) on p 433.
+equation (23) on p 433 in Smith (2016).
 }
 \details{
 This function does not do 'exp' in Smith (2016, p433), so it calculates
