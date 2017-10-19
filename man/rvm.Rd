@@ -4,35 +4,43 @@
 \alias{rvm}
 \title{Generate random deviates from a von Mises distribution}
 \usage{
-rvm(n, mu, k)
+rvm(n, mu, kappa)
 }
 \arguments{
-\item{n}{number of observations.}
+\item{n}{number of observations. Must be a scalar.}
 
-\item{mu}{mean direction of the distribution.}
+\item{mu}{mean direction of the distribution. Must be a scalar.}
 
-\item{k}{kappa parameter. A positive numeric value for the concentration
-parameter of the distribution.}
+\item{kappa}{concentration parameter. That is, the kappa. A positive value
+for the concentration parameter of the distribution. Must be a scalar.}
 }
 \value{
 a column vector
 }
 \description{
-This function generates random deviates from a von Mises distribution with
-parameters, mu and k (ie kappa).
+This function generates random numbers in radian unit from a von Mises
+distribution using the location (ie mean) parameter, mu and the
+concentration (ie precision) parameter kappa.
 }
 \details{
-A random deviate for a circular normal distribution has the form:\cr
+A random number for a circular normal distribution has the form:\cr
 \deqn{f(theta; mu, kappa) = 1 / (2*pi*I0(kappa)) * exp(kappa*cos(theta-mu))}
-theta is within 0 and 2*pi.
+theta is between 0 and 2*pi.
 
 \code{I0(kappa)} in the normalizing constant is the modified Bessel
 function of the first kind and order zero.
 }
 \examples{
-n  <- 100
+n  <- 1e2
 mu <- 0
 k  <- 10
-vm_de <- rvm(n, mu, k)      ## in degree unit
-vm_pi <- vm_de \%\% (2 * pi)  ## in radian unit
+
+\dontrun{
+vm1 <- circular:::RvonmisesRad(n, mu, k)
+vm2 <- rvm(n, mu, k)
+vm3 <- circular:::conversion.circular(circular:::circular(vm1))
+vm4 <- circular:::conversion.circular(circular:::circular(vm2))
+plot(vm3)
+plot(vm4)
+}
 }

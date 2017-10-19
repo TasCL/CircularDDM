@@ -6,96 +6,145 @@
 
 using namespace Rcpp;
 
+// besselzero
+arma::vec besselzero(double nu, unsigned int k, unsigned int kind);
+RcppExport SEXP _CircularDDM_besselzero(SEXP nuSEXP, SEXP kSEXP, SEXP kindSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type kind(kindSEXP);
+    rcpp_result_gen = Rcpp::wrap(besselzero(nu, k, kind));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dhamana
+arma::vec dhamana(arma::vec RT, double a, double t0, double sigma, unsigned int k);
+RcppExport SEXP _CircularDDM_dhamana(SEXP RTSEXP, SEXP aSEXP, SEXP t0SEXP, SEXP sigmaSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type RT(RTSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(dhamana(RT, a, t0, sigma, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dcircle
+arma::vec dcircle(arma::mat x, double a, double mu1, double mu2, double t0, double sigma, unsigned int k);
+RcppExport SEXP _CircularDDM_dcircle(SEXP xSEXP, SEXP aSEXP, SEXP mu1SEXP, SEXP mu2SEXP, SEXP t0SEXP, SEXP sigmaSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type mu1(mu1SEXP);
+    Rcpp::traits::input_parameter< double >::type mu2(mu2SEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(dcircle(x, a, mu1, mu2, t0, sigma, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcircle
+arma::mat rcircle(unsigned int n, double a, double mu1, double mu2, double t0, double sigma, unsigned int k, double lower, double upper, unsigned int nth);
+RcppExport SEXP _CircularDDM_rcircle(SEXP nSEXP, SEXP aSEXP, SEXP mu1SEXP, SEXP mu2SEXP, SEXP t0SEXP, SEXP sigmaSEXP, SEXP kSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type mu1(mu1SEXP);
+    Rcpp::traits::input_parameter< double >::type mu2(mu2SEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type nth(nthSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcircle(n, a, mu1, mu2, t0, sigma, k, lower, upper, nth));
+    return rcpp_result_gen;
+END_RCPP
+}
+// convDrift
+arma::vec convDrift(arma::vec mean_v, bool mag2xy);
+RcppExport SEXP _CircularDDM_convDrift(SEXP mean_vSEXP, SEXP mag2xySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type mean_v(mean_vSEXP);
+    Rcpp::traits::input_parameter< bool >::type mag2xy(mag2xySEXP);
+    rcpp_result_gen = Rcpp::wrap(convDrift(mean_v, mag2xy));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rvm
-arma::vec rvm(int n, double mu, double k);
-RcppExport SEXP CircularDDM_rvm(SEXP nSEXP, SEXP muSEXP, SEXP kSEXP) {
+arma::vec rvm(int n, double mu, double kappa);
+RcppExport SEXP _CircularDDM_rvm(SEXP nSEXP, SEXP muSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< double >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(rvm(n, mu, k));
-    return rcpp_result_gen;
-END_RCPP
-}
-// besselzero
-arma::vec besselzero(double nu, int k, int kind);
-RcppExport SEXP CircularDDM_besselzero(SEXP nuSEXP, SEXP kSEXP, SEXP kindSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type nu(nuSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    Rcpp::traits::input_parameter< int >::type kind(kindSEXP);
-    rcpp_result_gen = Rcpp::wrap(besselzero(nu, k, kind));
-    return rcpp_result_gen;
-END_RCPP
-}
-// logLik_resp
-arma::vec logLik_resp(arma::mat x, arma::vec pVec);
-RcppExport SEXP CircularDDM_logLik_resp(SEXP xSEXP, SEXP pVecSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
-    rcpp_result_gen = Rcpp::wrap(logLik_resp(x, pVec));
-    return rcpp_result_gen;
-END_RCPP
-}
-// logLik_dt
-arma::vec logLik_dt(arma::mat x, arma::vec pVec, int k);
-RcppExport SEXP CircularDDM_logLik_dt(SEXP xSEXP, SEXP pVecSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(logLik_dt(x, pVec, k));
-    return rcpp_result_gen;
-END_RCPP
-}
-// dcddm
-arma::vec dcddm(arma::mat x, arma::vec pVec, int k);
-RcppExport SEXP CircularDDM_dcddm(SEXP xSEXP, SEXP pVecSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
-    Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(dcddm(x, pVec, k));
+    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
+    rcpp_result_gen = Rcpp::wrap(rvm(n, mu, kappa));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcddm1
-arma::mat rcddm1(int n, arma::vec pVec, double p);
-RcppExport SEXP CircularDDM_rcddm1(SEXP nSEXP, SEXP pVecSEXP, SEXP pSEXP) {
+arma::mat rcddm1(unsigned int n, double a, double mu1, double mu2, double t0, double sigma, double stepSize, double stepTime);
+RcppExport SEXP _CircularDDM_rcddm1(SEXP nSEXP, SEXP aSEXP, SEXP mu1SEXP, SEXP mu2SEXP, SEXP t0SEXP, SEXP sigmaSEXP, SEXP stepSizeSEXP, SEXP stepTimeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type pVec(pVecSEXP);
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcddm1(n, pVec, p));
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type a(aSEXP);
+    Rcpp::traits::input_parameter< double >::type mu1(mu1SEXP);
+    Rcpp::traits::input_parameter< double >::type mu2(mu2SEXP);
+    Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
+    Rcpp::traits::input_parameter< double >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type stepSize(stepSizeSEXP);
+    Rcpp::traits::input_parameter< double >::type stepTime(stepTimeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcddm1(n, a, mu1, mu2, t0, sigma, stepSize, stepTime));
     return rcpp_result_gen;
 END_RCPP
 }
 // rcddm2_internal
-arma::mat rcddm2_internal(int n, arma::vec threshold, arma::vec angle, arma::mat sp, double t0, double p);
-RcppExport SEXP CircularDDM_rcddm2_internal(SEXP nSEXP, SEXP thresholdSEXP, SEXP angleSEXP, SEXP spSEXP, SEXP t0SEXP, SEXP pSEXP) {
+arma::mat rcddm2_internal(unsigned int n, arma::vec threshold, arma::vec angle, arma::mat sp, double t0, double stepSize, double stepTime);
+RcppExport SEXP _CircularDDM_rcddm2_internal(SEXP nSEXP, SEXP thresholdSEXP, SEXP angleSEXP, SEXP spSEXP, SEXP t0SEXP, SEXP stepSizeSEXP, SEXP stepTimeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type threshold(thresholdSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type angle(angleSEXP);
     Rcpp::traits::input_parameter< arma::mat >::type sp(spSEXP);
     Rcpp::traits::input_parameter< double >::type t0(t0SEXP);
-    Rcpp::traits::input_parameter< double >::type p(pSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcddm2_internal(n, threshold, angle, sp, t0, p));
+    Rcpp::traits::input_parameter< double >::type stepSize(stepSizeSEXP);
+    Rcpp::traits::input_parameter< double >::type stepTime(stepTimeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcddm2_internal(n, threshold, angle, sp, t0, stepSize, stepTime));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_CircularDDM_besselzero", (DL_FUNC) &_CircularDDM_besselzero, 3},
+    {"_CircularDDM_dhamana", (DL_FUNC) &_CircularDDM_dhamana, 5},
+    {"_CircularDDM_dcircle", (DL_FUNC) &_CircularDDM_dcircle, 7},
+    {"_CircularDDM_rcircle", (DL_FUNC) &_CircularDDM_rcircle, 10},
+    {"_CircularDDM_convDrift", (DL_FUNC) &_CircularDDM_convDrift, 2},
+    {"_CircularDDM_rvm", (DL_FUNC) &_CircularDDM_rvm, 3},
+    {"_CircularDDM_rcddm1", (DL_FUNC) &_CircularDDM_rcddm1, 8},
+    {"_CircularDDM_rcddm2_internal", (DL_FUNC) &_CircularDDM_rcddm2_internal, 7},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_CircularDDM(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

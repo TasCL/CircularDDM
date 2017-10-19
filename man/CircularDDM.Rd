@@ -6,16 +6,25 @@
 \alias{CircularDDM-package}
 \title{Circular Drift-diffusion Model}
 \description{
-Circular drift-diffusion model for continuous report. This package
-implements the density function and the random number generator for circular
-drift-diffusion model described in Smith (2016). For circular
-drift-diffusion model, the random number refers to response time and
-response angles. Both are continuous. Most functions are implemented in
-Armadillo C++ via RcppArmadillo.
+\code{CircularDDM} provides density functions for circular
+decision-diffusion/decision-diffusion model for continuous report. It
+implements equations and convenient functions
+for calculating likelihood and generating random deviates. For circular
+DDM, random deviates are continuous response times and response angles.
 }
 \references{
-Smith, P. L. (2016). Diffusion Theory of Decision Making in
-Continuous Report, Psychological Review, 123(4), 425-451. http://dx.doi.org/10.1037/rev0000023
+\enumerate{
+      \item Smith, P. L. (2016). Diffusion Theory of Decision Making in
+      Continuous Report, \emph{Psychological Review}, 123 (4), 425--451.
+      \url{http://dx.doi.org/10.1037/rev0000023}.
+      \item Hamana, Y., & Matsumoto, H. (2013). The probability distributions
+      of the first hitting times of Bessel processes, \emph{Transactions}
+      \emph{of the American Mathematical Society}, 365, 5237--5257.
+      \item Agostinelli, C. and Lund, U (2017). R package 'circular':
+      Circular Statistics (version 0.4-93). \url{https://r-forge.r-project.org/projects/circular/}.
+      \item Von Winckel, G. besselzero.m
+      \url{http://au.mathworks.com/matlabcentral/fileexchange/6794-bessel-function-zeros/content/besselzero.m}
+}
 }
 \author{
 Yi-Shin Lin <yishin.lin@utas.edu.au> \cr
