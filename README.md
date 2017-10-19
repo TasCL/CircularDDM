@@ -4,9 +4,9 @@ CircularDDM implements circular drift-diffusion/decision-diffusion model, using
 Armadillo C++.  
 
 MATLAB callable functions reside in inst/matlab folder.  Currently, we provide 
-only Linux binary (mexa64 files compiled by g++ 5.4.0). If the libraries, 
-GNU gsl and armadillo C++ (requiring LAPACK and BLAS), are installed,
-one should be able to compile the source codes in other systems, such as 
+only Linux binary (mexa64 files compiled by g++ 5.4.0). If the 
+libraries, GNU gsl and armadillo C++ (requiring LAPACK and BLAS), are installed,
+it one should be able to compile the source codes in other systems, such as 
 Windows (mexw64 files) and OS X (mexmaci64 files).  
 
 ## Getting Started
@@ -40,7 +40,6 @@ angle <- rvm(1e3, 0, 10)
 sp    <- cbind(runif(10, 0, 1), runif(10, 0,1))
 dat   <- rcddm2(1e3, thre, angle, sp, t0)
 
-
 ## Fix starting point at a constant
 t0    <- .25
 thre  <- runif(1, 0, 2); threshold
@@ -51,6 +50,7 @@ dat   <- rcddm2(1e3, threshold, angle, startpoint, t0)
 ```
 
 ## Installation and Prerequisites
+This GitHub version has not yet published in CRAN.
 
 ### R package 
 ```
@@ -96,10 +96,9 @@ MATLAB package requires:
 
 - GNU gsl 1.16 (gsl requires CBLAS)
 - Armadillo ( >= 0.6.700.6.0)
-- Armadillo requires either (1) LAPACK and BLAS, (2) OpenBLAS or (3) Intel Math
-Kernel Library (MKL). I have not tested the third option. However Aramadillo's 
-author recommends it as a perhaps even faster option. 
-- See [Armadillo C++](http://arma.sourceforge.net/download.html) for details.
+- Armadillo requires LAPACK, BLAS, and OpenBLAS. 
+- See [Armadillo C++](http://arma.sourceforge.net/download.html) for further 
+details.
 
 ## Contributors
 
