@@ -1,3 +1,9 @@
+0.2.0. Yi-Shin Lin <yishin.lin@utas.edu.au>
+  - Add rcircle, dcircle and convDrift functions
+
+0.1.8. Yi-Shin Lin <yishin.lin@utas.edu.au>
+  - Add dhamana density function
+
 0.1.5. Yi-Shin Lin <yishin.lin@utas.edu.au>
 
   - Change unit circle to scaled circle. That is, in rcddm1.cpp, the kappa (k)
